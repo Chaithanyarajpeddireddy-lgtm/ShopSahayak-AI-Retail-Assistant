@@ -1,0 +1,254 @@
+/* ==========================================================================
+   ShopSahayak - Data Visualizations & SVG Charts
+   Revenue Curve, Stacked Inventory Health Bar, Demand Bars, Donut Charts
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   CHART CARD CONTAINER & CONTROLS
+   -------------------------------------------------------------------------- */
+.chart-card {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-xs);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.chart-header {
+  padding: var(--space-4) var(--space-5);
+  border-bottom: 1px solid var(--color-border-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+.chart-title-wrap {
+  display: flex;
+  flex-direction: column;
+}
+
+.chart-title {
+  font-family: var(--font-family-display);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+}
+
+.chart-subtitle {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+}
+
+.segmented-control {
+  display: inline-flex;
+  background-color: var(--color-canvas);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 2px;
+  gap: 2px;
+}
+
+.segmented-btn {
+  background: transparent;
+  border: none;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  padding: 3px 8px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.segmented-btn:hover {
+  color: var(--color-text-primary);
+}
+
+.segmented-btn.active {
+  background-color: var(--color-surface);
+  color: var(--color-primary);
+  box-shadow: var(--shadow-xs);
+}
+
+.chart-body {
+  padding: var(--space-5);
+  position: relative;
+}
+
+/* --------------------------------------------------------------------------
+   INTERACTIVE SVG LINE CHART
+   -------------------------------------------------------------------------- */
+.svg-chart-container {
+  width: 100%;
+  height: 220px;
+  position: relative;
+}
+
+.svg-chart {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.chart-grid-line {
+  stroke: var(--color-border-subtle);
+  stroke-dasharray: 4 4;
+  stroke-width: 1;
+}
+
+.chart-axis-label {
+  font-family: var(--font-family-sans);
+  font-size: 10.5px;
+  fill: var(--color-text-muted);
+  user-select: none;
+}
+
+.chart-line-main {
+  fill: none;
+  stroke: #2563eb;
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  filter: drop-shadow(0 2px 4px rgba(37, 99, 235, 0.15));
+}
+
+.chart-area-main {
+  fill: url(#revenueGradient);
+}
+
+.chart-line-secondary {
+  fill: none;
+  stroke: #94a3b8;
+  stroke-width: 1.5;
+  stroke-dasharray: 3 3;
+  opacity: 0.7;
+}
+
+.chart-point {
+  fill: #ffffff;
+  stroke: #2563eb;
+  stroke-width: 2.5;
+  cursor: pointer;
+  transition: transform 120ms ease, r 120ms ease;
+}
+
+.chart-point:hover {
+  r: 6;
+  fill: #2563eb;
+  stroke: #ffffff;
+}
+
+/* Floating Tooltip */
+.chart-tooltip {
+  position: absolute;
+  background-color: var(--color-primary);
+  color: #ffffff;
+  padding: 6px 10px;
+  border-radius: var(--radius-sm);
+  font-size: 11px;
+  pointer-events: none;
+  box-shadow: var(--shadow-md);
+  transform: translate(-50%, -120%);
+  display: none;
+  z-index: 10;
+  white-space: nowrap;
+}
+
+.chart-tooltip-title {
+  color: #94a3b8;
+  font-size: 10px;
+  margin-bottom: 2px;
+}
+
+.chart-tooltip-val {
+  font-weight: 700;
+  font-size: 12px;
+}
+
+/* --------------------------------------------------------------------------
+   HORIZONTAL INVENTORY HEALTH BAR
+   -------------------------------------------------------------------------- */
+.inventory-health-container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.stacked-health-bar {
+  display: flex;
+  height: 12px;
+  border-radius: var(--radius-pill);
+  overflow: hidden;
+  background-color: var(--color-canvas);
+  border: 1px solid var(--color-border);
+}
+
+.health-segment {
+  height: 100%;
+  transition: width 0.4s ease;
+}
+
+.health-segment-healthy {
+  background-color: var(--color-success);
+}
+
+.health-segment-low {
+  background-color: var(--color-warning);
+}
+
+.health-segment-out {
+  background-color: var(--color-danger);
+}
+
+.health-legend-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--color-text-secondary);
+}
+
+.legend-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.legend-val {
+  font-weight: 700;
+  color: var(--color-text-primary);
+}
+
+/* --------------------------------------------------------------------------
+   BAR & PROGRESS METRICS
+   -------------------------------------------------------------------------- */
+.progress-bar-wrap {
+  width: 100%;
+  height: 6px;
+  background-color: var(--color-canvas-subtle);
+  border-radius: var(--radius-pill);
+  overflow: hidden;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  border-radius: var(--radius-pill);
+  transition: width 0.3s ease;
+}
+
+.progress-fill-emerald { background-color: var(--color-success); }
+.progress-fill-amber { background-color: var(--color-warning); }
+.progress-fill-red { background-color: var(--color-danger); }
+.progress-fill-blue { background-color: var(--color-brand-accent); }

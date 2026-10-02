@@ -1,0 +1,681 @@
+/* ==========================================================================
+   ShopSahayak - AI Assistant & Voice Command Center Styles
+   Agentic Execution Steps, LiveKit Voice Mode, Beyond Presence Avatar
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   AI COMMAND CENTER CONTAINER
+   -------------------------------------------------------------------------- */
+.ai-command-center {
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  gap: var(--space-5);
+  height: calc(100vh - var(--topbar-height) - 130px);
+  min-height: 560px;
+}
+
+@media (max-width: 1080px) {
+  .ai-command-center {
+    grid-template-columns: 1fr;
+    height: auto;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   LEFT PANEL: CONVERSATION & AGENTIC ACTIONS
+   -------------------------------------------------------------------------- */
+.ai-chat-column {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-xs);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  height: 100%;
+}
+
+.ai-chat-header {
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid var(--color-border-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: var(--color-surface);
+}
+
+.ai-assistant-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.ai-sparkle-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-md);
+  background: linear-gradient(135deg, #4338ca 0%, #6366f1 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  box-shadow: 0 2px 6px rgba(99, 102, 241, 0.25);
+}
+
+.ai-title-wrap {
+  display: flex;
+  flex-direction: column;
+}
+
+.ai-header-title {
+  font-family: var(--font-family-display);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.ai-online-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  color: var(--color-success-dark);
+  font-weight: 500;
+}
+
+.ai-status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: var(--color-success);
+}
+
+.ai-chat-controls {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Chat Message Thread */
+.ai-messages-scroll {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  background: linear-gradient(180deg, #fcfcfd 0%, #f8fafc 100%);
+}
+
+.chat-bubble-row {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-width: 86%;
+}
+
+.chat-bubble-row.user-row {
+  align-self: flex-end;
+  align-items: flex-end;
+}
+
+.chat-bubble-row.ai-row {
+  align-self: flex-start;
+  align-items: flex-start;
+}
+
+.chat-bubble {
+  padding: 12px 16px;
+  border-radius: var(--radius-lg);
+  font-size: 13.5px;
+  line-height: 1.5;
+}
+
+.user-bubble {
+  background-color: var(--color-primary);
+  color: #ffffff;
+  border-bottom-right-radius: var(--radius-xs);
+}
+
+.ai-bubble {
+  background-color: #ffffff;
+  color: var(--color-text-primary);
+  border: 1px solid var(--color-border);
+  border-bottom-left-radius: var(--radius-xs);
+  box-shadow: var(--shadow-xs);
+}
+
+.detected-lang-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--color-ai-indigo);
+  background-color: var(--color-ai-surface);
+  padding: 2px 8px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--color-ai-border);
+  align-self: flex-end;
+}
+
+/* --------------------------------------------------------------------------
+   AGENTIC TOOL EXECUTION ACTIVITY TIMELINE
+   -------------------------------------------------------------------------- */
+.agentic-tools-box {
+  background-color: #ffffff;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: 12px 14px;
+  margin-top: 6px;
+  width: 100%;
+  box-shadow: var(--shadow-xs);
+}
+
+.agentic-box-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.agentic-box-title {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-ai-indigo);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.agentic-steps-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.agentic-step-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--color-text-secondary);
+}
+
+.agentic-step-icon {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background-color: var(--color-success-surface);
+  color: var(--color-success-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.agentic-step-icon.spinning {
+  background-color: var(--color-ai-surface);
+  color: var(--color-ai-indigo);
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  100% { transform: rotate(360deg); }
+}
+
+/* --------------------------------------------------------------------------
+   EXPANDABLE CALCULATION EXPLANATION ("How I calculated this")
+   -------------------------------------------------------------------------- */
+.calculation-card {
+  background: var(--color-canvas);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  margin-top: 8px;
+  overflow: hidden;
+  font-size: 12px;
+}
+
+.calculation-summary {
+  padding: 8px 12px;
+  cursor: pointer;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  user-select: none;
+  background-color: var(--color-canvas-subtle);
+}
+
+.calculation-summary:hover {
+  color: var(--color-text-primary);
+}
+
+.calculation-body {
+  padding: 10px 12px;
+  border-top: 1px solid var(--color-border);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  color: var(--color-text-secondary);
+}
+
+.calc-formula-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--font-family-mono);
+  font-size: 11.5px;
+  padding: 3px 0;
+  border-bottom: 1px dashed var(--color-border);
+}
+
+.calc-formula-row:last-child {
+  border-bottom: none;
+  font-weight: 700;
+  color: var(--color-text-primary);
+}
+
+/* --------------------------------------------------------------------------
+   ACTIONABLE PURCHASE RECOMMENDATION CARD
+   -------------------------------------------------------------------------- */
+.ai-action-card {
+  background: #ffffff;
+  border: 1px solid #c7d2fe;
+  border-radius: var(--radius-lg);
+  padding: 14px;
+  margin-top: 10px;
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.ai-action-badge-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.ai-action-title {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--color-text-primary);
+}
+
+.ai-action-metrics {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+  background: var(--color-canvas);
+  padding: 8px 10px;
+  border-radius: var(--radius-md);
+  font-size: 12px;
+}
+
+.ai-action-metric-label {
+  color: var(--color-text-muted);
+  font-size: 11px;
+}
+
+.ai-action-metric-val {
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.ai-action-buttons {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+/* --------------------------------------------------------------------------
+   CHAT INPUT BAR & QUICK SUGGESTION CHIPS
+   -------------------------------------------------------------------------- */
+.ai-chat-footer {
+  padding: var(--space-3) var(--space-4);
+  border-top: 1px solid var(--color-border);
+  background-color: var(--color-surface);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.quick-prompts-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  overflow-x: auto;
+  padding-bottom: 2px;
+}
+
+.prompt-chip {
+  background-color: var(--color-canvas);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-pill);
+  padding: 4px 10px;
+  font-size: 11.5px;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all var(--transition-fast);
+}
+
+.prompt-chip:hover {
+  background-color: var(--color-canvas-subtle);
+  border-color: var(--color-border-strong);
+  color: var(--color-text-primary);
+}
+
+.chat-input-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  position: relative;
+}
+
+.ai-input-field {
+  flex: 1;
+  height: 40px;
+  background-color: var(--color-canvas);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-lg);
+  padding: 0 44px 0 14px;
+  font-size: 13.5px;
+  color: var(--color-text-primary);
+  outline: none;
+  transition: all var(--transition-fast);
+}
+
+.ai-input-field:focus {
+  background-color: #ffffff;
+  border-color: var(--color-ai-primary);
+  box-shadow: 0 0 0 1px var(--color-ai-primary);
+}
+
+.ai-send-btn {
+  position: absolute;
+  right: 6px;
+  width: 30px;
+  height: 30px;
+  border-radius: var(--radius-md);
+  background-color: var(--color-primary);
+  color: #ffffff;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.ai-send-btn:hover {
+  background-color: var(--color-primary-hover);
+}
+
+/* --------------------------------------------------------------------------
+   RIGHT PANEL: LIVEKIT VOICE AI & BEYOND PRESENCE AVATAR
+   -------------------------------------------------------------------------- */
+.ai-context-column {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  height: 100%;
+  overflow-y: auto;
+}
+
+/* Beyond Presence Avatar Card */
+.avatar-card {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-xs);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.avatar-card-header {
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--color-border-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+}
+
+.avatar-display-area {
+  padding: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(circle at center, #f5f3ff 0%, #fafafa 100%);
+  position: relative;
+  min-height: 180px;
+  border-bottom: 1px solid var(--color-border-subtle);
+}
+
+.avatar-circle-frame {
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 3px solid #c7d2fe;
+  box-shadow: 0 4px 16px rgba(99, 102, 241, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.avatar-speaking-glow {
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  border: 2px solid var(--color-ai-primary);
+  opacity: 0;
+  animation: pulseGlow 2s infinite;
+}
+
+.avatar-speaking .avatar-speaking-glow {
+  opacity: 1;
+}
+
+@keyframes pulseGlow {
+  0% { transform: scale(1); opacity: 0.8; }
+  50% { transform: scale(1.08); opacity: 0.3; }
+  100% { transform: scale(1); opacity: 0.8; }
+}
+
+.avatar-img-art {
+  width: 84px;
+  height: 84px;
+  border-radius: 50%;
+}
+
+.avatar-caption-box {
+  margin-top: 12px;
+  text-align: center;
+  max-width: 260px;
+  font-size: 12px;
+  color: var(--color-text-secondary);
+  font-style: italic;
+  min-height: 36px;
+}
+
+/* --------------------------------------------------------------------------
+   LIVEKIT VOICE INTERACTION CARD
+   -------------------------------------------------------------------------- */
+.voice-ai-card {
+  background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+  box-shadow: var(--shadow-xs);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--space-3);
+  position: relative;
+}
+
+.voice-badge-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #4338ca;
+  background-color: #e0e7ff;
+  padding: 2px 8px;
+  border-radius: var(--radius-pill);
+}
+
+.voice-status-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--color-text-primary);
+}
+
+.voice-status-subtitle {
+  font-size: 12px;
+  color: var(--color-text-muted);
+}
+
+/* Central Microphone Button */
+.voice-mic-trigger {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  color: #ffffff;
+  border: 3px solid #e2e8f0;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  position: relative;
+}
+
+.voice-mic-trigger:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 20px rgba(15, 23, 42, 0.3);
+}
+
+.voice-mic-trigger.listening {
+  background: linear-gradient(135deg, #4338ca 0%, #6366f1 100%);
+  border-color: #a5b4fc;
+  box-shadow: 0 0 0 6px rgba(99, 102, 241, 0.25);
+}
+
+.voice-mic-trigger.speaking {
+  background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+  border-color: #6ee7b7;
+  box-shadow: 0 0 0 6px rgba(16, 185, 129, 0.25);
+}
+
+/* Live Audio Waveform Bars */
+.voice-waveform-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  height: 28px;
+  width: 100%;
+}
+
+.waveform-bar {
+  width: 3px;
+  height: 6px;
+  background-color: var(--color-text-subtle);
+  border-radius: var(--radius-pill);
+  transition: height 120ms ease;
+}
+
+.voice-active .waveform-bar {
+  background-color: var(--color-ai-primary);
+  animation: waveBar 0.8s ease-in-out infinite alternate;
+}
+
+.waveform-bar:nth-child(2) { animation-delay: 0.1s; }
+.waveform-bar:nth-child(3) { animation-delay: 0.2s; }
+.waveform-bar:nth-child(4) { animation-delay: 0.3s; }
+.waveform-bar:nth-child(5) { animation-delay: 0.15s; }
+.waveform-bar:nth-child(6) { animation-delay: 0.25s; }
+.waveform-bar:nth-child(7) { animation-delay: 0.05s; }
+.waveform-bar:nth-child(8) { animation-delay: 0.35s; }
+
+@keyframes waveBar {
+  0% { height: 6px; }
+  100% { height: 24px; }
+}
+
+.voice-controls-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+/* --------------------------------------------------------------------------
+   LIVE CONTEXT / STORE TELEMETRY SNIPPET
+   -------------------------------------------------------------------------- */
+.telemetry-card {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: 12px 14px;
+  box-shadow: var(--shadow-xs);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 12px;
+}
+
+.telemetry-header {
+  font-weight: 700;
+  color: var(--color-text-secondary);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.telemetry-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: var(--color-text-secondary);
+  padding: 4px 0;
+  border-bottom: 1px solid var(--color-border-subtle);
+}
+
+.telemetry-item:last-child {
+  border-bottom: none;
+}
+
+.telemetry-item-val {
+  font-weight: 600;
+  color: var(--color-text-primary);
+}

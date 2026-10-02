@@ -1,0 +1,1396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ShopSahayak — AI Business Assistant for Local Retail Stores</title>
+  <meta name="description" content="Production-quality AI operating system for Indian retail and kirana stores. Combines inventory, sales, customer ledgers, voice AI, and autonomous agentic restocking.">
+
+  <!-- Google Fonts: Inter & Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+
+  <!-- Application Stylesheets -->
+  <link rel="stylesheet" href="css/design-tokens.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/ai-assistant.css">
+  <link rel="stylesheet" href="css/charts.css">
+  <link rel="stylesheet" href="css/pages.css">
+</head>
+<body>
+  <div id="app">
+    <!-- ======================================================================
+         LEFT SIDEBAR NAVIGATION
+         ====================================================================== -->
+    <aside class="sidebar">
+      <div>
+        <div class="sidebar-header">
+          <a href="#" class="brand-link" onclick="window.shopUI.switchView('overview'); return false;">
+            <div class="brand-icon">✦</div>
+            <div class="brand-name">
+              <span class="brand-title">ShopSahayak</span>
+              <span class="brand-subtitle">Retail OS</span>
+            </div>
+          </a>
+        </div>
+
+        <div class="sidebar-content">
+          <div class="nav-section">
+            <span class="nav-section-title">Core Operating System</span>
+            
+            <a class="nav-item active" data-view="overview">
+              <div class="nav-item-left">
+                <svg class="nav-item-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+                <span class="nav-item-label" data-i18n="navOverview">Overview</span>
+              </div>
+            </a>
+
+            <a class="nav-item ai-nav" data-view="ai-assistant">
+              <div class="nav-item-left">
+                <svg class="nav-item-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                <span class="nav-item-label" data-i18n="navAi">AI Assistant</span>
+              </div>
+              <span class="nav-pill nav-pill-ai">Co-Pilot</span>
+            </a>
+
+            <a class="nav-item" data-view="products">
+              <div class="nav-item-left">
+                <svg class="nav-item-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+                <span class="nav-item-label" data-i18n="navProducts">Products</span>
+              </div>
+            </a>
+
+            <a class="nav-item" data-view="inventory">
+              <div class="nav-item-left">
+                <svg class="nav-item-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/></svg>
+                <span class="nav-item-label" data-i18n="navInventory">Inventory</span>
+              </div>
+              <span class="nav-pill nav-pill-amber" id="sidebarLowStockPill">6 Low</span>
+            </a>
+
+            <a class="nav-item" data-view="sales">
+              <div class="nav-item-left">
+                <svg class="nav-item-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                <span class="nav-item-label" data-i18n="navSales">Sales & Billing</span>
+              </div>
+            </a>
+
+            <a class="nav-item" data-view="customers">
+              <div class="nav-item-left">
+                <svg class="nav-item-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+                <span class="nav-item-label" data-i18n="navCustomers">Customers & Khata</span>
+              </div>
+            </a>
+
+            <a class="nav-item" data-view="suppliers">
+              <div class="nav-item-left">
+                <svg class="nav-item-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 4H6a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-2m-4-1v8m0 0l3-3m-3 3L9 8m-5 5h2.586a1 1 0 01.707.293l2.414 2.414a1 1 0 00.707.293h3.172a1 1 0 00.707-.293l2.414-2.414a1 1 0 01.707-.293H20"/></svg>
+                <span class="nav-item-label" data-i18n="navSuppliers">Suppliers</span>
+              </div>
+            </a>
+          </div>
+
+          <div class="nav-section">
+            <span class="nav-section-title">Intelligence & Reports</span>
+            
+            <a class="nav-item" data-view="analytics">
+              <div class="nav-item-left">
+                <svg class="nav-item-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+                <span class="nav-item-label" data-i18n="navAnalytics">Analytics</span>
+              </div>
+            </a>
+
+            <a class="nav-item" data-view="reports">
+              <div class="nav-item-left">
+                <svg class="nav-item-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                <span class="nav-item-label" data-i18n="navReports">Reports</span>
+              </div>
+            </a>
+
+            <a class="nav-item" data-view="notifications">
+              <div class="nav-item-left">
+                <svg class="nav-item-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
+                <span class="nav-item-label" data-i18n="navNotifications">Notifications</span>
+              </div>
+            </a>
+
+            <a class="nav-item" data-view="settings">
+              <div class="nav-item-left">
+                <svg class="nav-item-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                <span class="nav-item-label" data-i18n="navSettings">Settings</span>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="sidebar-footer">
+        <div class="sync-status-card">
+          <div class="sync-status-left">
+            <span class="status-dot-pulse"></span>
+            <span>Tally/POS Synced (2m)</span>
+          </div>
+          <span style="color:var(--color-text-muted); font-size:10px;">v2.4</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ======================================================================
+         MAIN CONTENT AREA
+         ====================================================================== -->
+    <div class="main-wrapper">
+      <!-- TOP BAR -->
+      <header class="topbar">
+        <div class="topbar-left">
+          <div class="store-selector-trigger">
+            <span>🏪</span>
+            <span id="topbarStoreName">Sharma Kirana Store</span>
+            <span class="store-badge">Verified Retailer</span>
+          </div>
+
+          <div class="global-search-container">
+            <svg class="search-icon-fixed" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+            <input type="text" id="globalSearchInput" class="search-input" placeholder="Search products, orders, customers, or ask AI..." data-i18n-ph="searchPlaceholder">
+            <div class="search-kbd-shortcut">Ctrl+K</div>
+          </div>
+        </div>
+
+        <div class="topbar-right">
+          <!-- Guided Demo Flow Trigger -->
+          <button class="demo-flow-badge-btn" id="demoAutoBtn" title="Run Hackathon 13-step Demo Flow">
+            <span class="demo-pulse"></span>
+            <span>Interactive Demo</span>
+          </button>
+
+          <!-- Language Selector -->
+          <div class="lang-selector">
+            <button class="lang-btn active" data-lang="en">EN</button>
+            <button class="lang-btn" data-lang="te">తెలుగు</button>
+            <button class="lang-btn" data-lang="hi">हिंदी</button>
+          </div>
+
+          <!-- Ask AI Button -->
+          <button class="topbar-ai-btn" id="topbarAiBtn">
+            <span>✦</span>
+            <span data-i18n="askAiBtn">Ask ShopSahayak</span>
+          </button>
+
+          <!-- Notifications Button -->
+          <button class="icon-action-btn" onclick="window.shopUI.switchView('notifications')" title="Notifications">
+            <svg style="width:18px; height:18px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
+            <span class="notification-count-badge" id="topbarNotifBadge">2</span>
+          </button>
+
+          <!-- User Profile Chip -->
+          <div class="user-profile-chip" onclick="window.shopUI.switchView('settings')">
+            <div class="user-avatar-initials">RS</div>
+            <div class="user-details">
+              <span class="user-name">Ravi Sharma</span>
+              <span class="user-role-badge" id="topbarRoleBadge">Owner</span>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- MAIN SCROLLABLE CONTENT CANVAS -->
+      <main class="main-content">
+        <!-- GUIDED WALKTHROUGH DEMO BANNER -->
+        <div class="walkthrough-banner" id="walkthroughBanner">
+          <div class="walkthrough-info">
+            <span class="walkthrough-step-badge" id="demoStepBadge">Step 1/13</span>
+            <div class="walkthrough-text" id="demoStepText">
+              <strong>Owner Session Active:</strong> Ravi Sharma logs in to Sharma Kirana Store operating system.
+            </div>
+          </div>
+          <div class="walkthrough-controls">
+            <button class="walkthrough-btn walkthrough-btn-secondary" id="demoPrevBtn">← Prev</button>
+            <button class="walkthrough-btn" id="demoNextBtn">Next Step →</button>
+          </div>
+        </div>
+
+        <!-- ==================================================================
+             VIEW 1: OVERVIEW / DASHBOARD
+             ================================================================== -->
+        <section class="page-view active" id="view-overview">
+          <div class="page-header">
+            <div class="page-title-group">
+              <h1 class="page-title" data-i18n="greeting">Good morning, Ravi</h1>
+              <p class="page-subtitle" data-i18n="greetingSub">Here's what needs your attention today across Sharma Kirana Store</p>
+            </div>
+            <div class="page-actions">
+              <button class="btn btn-secondary" onclick="window.shopUI.openNewSaleModal()">+ Quick POS Bill</button>
+              <button class="btn btn-primary" onclick="window.shopUI.openAddProductModal()">+ Add Product</button>
+            </div>
+          </div>
+
+          <!-- TOP KPI METRICS GRID -->
+          <div class="kpi-grid">
+            <div class="kpi-card">
+              <div class="kpi-card-header">
+                <span class="kpi-title" data-i18n="kpiRevenue">Today's Revenue</span>
+                <span class="kpi-icon">📈</span>
+              </div>
+              <div class="kpi-value tabular-nums" id="kpiRevenueVal">₹18,450</div>
+              <div class="kpi-footer">
+                <span class="trend-badge trend-positive">↑ +12.4%</span>
+                <span class="trend-subtext">vs yesterday</span>
+              </div>
+            </div>
+
+            <div class="kpi-card">
+              <div class="kpi-card-header">
+                <span class="kpi-title" data-i18n="kpiOrders">Orders</span>
+                <span class="kpi-icon">🛒</span>
+              </div>
+              <div class="kpi-value tabular-nums" id="kpiOrdersVal">47</div>
+              <div class="kpi-footer">
+                <span class="trend-badge trend-positive">↑ +8.2%</span>
+                <span class="trend-subtext">avg bill ₹392</span>
+              </div>
+            </div>
+
+            <div class="kpi-card">
+              <div class="kpi-card-header">
+                <span class="kpi-title" data-i18n="kpiProfit">Estimated Profit</span>
+                <span class="kpi-icon">💰</span>
+              </div>
+              <div class="kpi-value tabular-nums" id="kpiProfitVal">₹6,240</div>
+              <div class="kpi-footer">
+                <span class="trend-badge trend-positive">↑ +6.7%</span>
+                <span class="trend-subtext">33.8% gross margin</span>
+              </div>
+            </div>
+
+            <div class="kpi-card" style="border-left: 3px solid var(--color-warning);">
+              <div class="kpi-card-header">
+                <span class="kpi-title" data-i18n="kpiLowStock">Low Stock Items</span>
+                <span class="kpi-icon">⚠</span>
+              </div>
+              <div class="kpi-value tabular-nums" id="kpiLowStockVal" style="color:var(--color-warning-dark);">6</div>
+              <div class="kpi-footer">
+                <span class="badge badge-warning" data-i18n="needsAttention">Needs attention</span>
+                <span class="trend-subtext">2 critical</span>
+              </div>
+            </div>
+
+            <div class="kpi-card">
+              <div class="kpi-card-header">
+                <span class="kpi-title" data-i18n="kpiCustomers">Active Customers</span>
+                <span class="kpi-icon">👥</span>
+              </div>
+              <div class="kpi-value tabular-nums" id="kpiCustomersVal">24</div>
+              <div class="kpi-footer">
+                <span class="trend-badge trend-positive">↑ +4</span>
+                <span class="trend-subtext">18 regular, 6 walk-in</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- AI BUSINESS INSIGHTS BANNER STRIP -->
+          <div class="insights-banner-grid" id="dashAiBanner">
+            <div class="insight-card insight-demand">
+              <div class="insight-top-meta">
+                <span class="badge badge-ai">✦ Demand Surge</span>
+                <span style="font-size:11px; color:var(--color-text-muted);">Festival Run</span>
+              </div>
+              <div class="insight-body-text">Rice demand increased 21% this week.</div>
+              <div class="insight-subtext">Bulk household purchases detected in Ward 12. Current stock may deplete in 48 hours.</div>
+              <a class="insight-action-link" onclick="window.shopUI.switchView('ai-assistant')">Review Inventory →</a>
+            </div>
+
+            <div class="insight-card insight-risk">
+              <div class="insight-top-meta">
+                <span class="badge badge-warning">⚠ Stock Risk</span>
+                <span style="font-size:11px; color:var(--color-text-muted);">Urgent</span>
+              </div>
+              <div class="insight-body-text">6 products are below their minimum stock level.</div>
+              <div class="insight-subtext">Fortune Sunflower Oil, Tata Salt, and Maggi Noodles reaching critical threshold.</div>
+              <a class="insight-action-link" onclick="window.shopUI.switchView('inventory')">Review Low Stock →</a>
+            </div>
+
+            <div class="insight-card insight-margin">
+              <div class="insight-top-meta">
+                <span class="badge badge-success">📈 Margin Deal</span>
+                <span style="font-size:11px; color:var(--color-text-muted);">Distributor Offer</span>
+              </div>
+              <div class="insight-body-text">Cooking oil sales trending upward (+18%).</div>
+              <div class="insight-subtext">Balaji Trading Co is offering a 4% volume rebate on 25-pouch bundles.</div>
+              <a class="insight-action-link" onclick="window.shopUI.openRestockModal('PROD-003')">View Distributor Deal →</a>
+            </div>
+          </div>
+
+          <!-- TWO-COLUMN DASHBOARD GRID: SALES CHART & INVENTORY HEALTH -->
+          <div class="dashboard-grid-two-col">
+            <!-- Left 60%: Sales Overview Line Chart -->
+            <div class="chart-card">
+              <div class="chart-header">
+                <div class="chart-title-wrap">
+                  <span class="chart-title" data-i18n="salesOverview">Sales & Revenue Overview</span>
+                  <span class="chart-subtitle">Peak hour: 6:00 PM - 8:30 PM (₹7,800) • Daily avg: ₹16,920</span>
+                </div>
+                <div class="segmented-control">
+                  <button class="segmented-btn active">7D</button>
+                  <button class="segmented-btn">30D</button>
+                  <button class="segmented-btn">3M</button>
+                </div>
+              </div>
+              <div class="chart-body" id="salesChartContainer">
+                <!-- SVG Chart injected via app.js -->
+              </div>
+            </div>
+
+            <!-- Right 40%: Inventory Health & Urgent Restock List -->
+            <div class="card" style="display:flex; flex-direction:column; justify-content:space-between;">
+              <div>
+                <div class="card-header">
+                  <div class="card-title" data-i18n="inventoryHealth">Inventory Health</div>
+                  <span class="badge badge-neutral">15 Active SKUs</span>
+                </div>
+                <div class="card-body">
+                  <div class="inventory-health-container">
+                    <div class="stacked-health-bar">
+                      <div class="health-segment health-segment-healthy" id="healthBarHealthy" style="width: 53%;"></div>
+                      <div class="health-segment health-segment-low" id="healthBarLow" style="width: 40%;"></div>
+                      <div class="health-segment health-segment-out" id="healthBarOut" style="width: 7%;"></div>
+                    </div>
+                    <div class="health-legend-row">
+                      <div class="legend-item">
+                        <span class="legend-dot" style="background:var(--color-success);"></span>
+                        <span>Healthy: <strong id="healthCountHealthy">8 SKUs (53%)</strong></span>
+                      </div>
+                      <div class="legend-item">
+                        <span class="legend-dot" style="background:var(--color-warning);"></span>
+                        <span>Low: <strong id="healthCountLow">6 SKUs (40%)</strong></span>
+                      </div>
+                      <div class="legend-item">
+                        <span class="legend-dot" style="background:var(--color-danger);"></span>
+                        <span>Out: <strong id="healthCountOut">1 SKU (7%)</strong></span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div style="margin-top:var(--space-4);">
+                    <div style="font-size:12px; font-weight:700; color:var(--color-text-secondary); margin-bottom:8px; text-transform:uppercase; letter-spacing:0.04em;">
+                      Urgent Restock Needed
+                    </div>
+                    <div class="urgent-restock-list" id="urgentRestockList">
+                      <!-- Rendered by app.js -->
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="card-footer">
+                <button class="btn btn-sm btn-secondary" onclick="window.shopUI.switchView('inventory')">View All Inventory</button>
+                <button class="btn btn-sm btn-ai" onclick="window.shopUI.switchView('ai-assistant')">Ask AI to Reorder</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- BOTTOM SECTION: TOP SELLING PRODUCTS TABLE -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title" data-i18n="topSellingProducts">Top Selling Products Today</div>
+              <button class="btn btn-sm btn-secondary" onclick="window.shopUI.switchView('products')">View Full Catalogue →</button>
+            </div>
+            <div class="table-container" style="border:none;">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Product</th>
+                    <th>Category</th>
+                    <th>Stock Status</th>
+                    <th>Units Sold</th>
+                    <th>Total Revenue</th>
+                    <th>Trend</th>
+                    <th style="text-align:right;">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="topSellingTableBody">
+                  <!-- Rendered by app.js -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==================================================================
+             VIEW 2: AI ASSISTANT COMMAND CENTER
+             ================================================================== -->
+        <section class="page-view" id="view-ai-assistant">
+          <div class="ai-command-center">
+            <!-- Left: Conversation Thread & Agentic Workflow Activity -->
+            <div class="ai-chat-column">
+              <div class="ai-chat-header">
+                <div class="ai-assistant-meta">
+                  <div class="ai-sparkle-avatar">✦</div>
+                  <div class="ai-title-wrap">
+                    <span class="ai-header-title">
+                      <span data-i18n="aiAssistantTitle">ShopSahayak AI Command Center</span>
+                    </span>
+                    <span class="ai-online-status">
+                      <span class="ai-status-dot"></span>
+                      <span data-i18n="aiStatusOnline">Online & Synced with Store</span>
+                    </span>
+                  </div>
+                </div>
+                <div class="ai-chat-controls">
+                  <button class="btn btn-sm btn-ghost" onclick="window.shopAiEngine.initWelcomeMessage(); window.shopUI.showToast('Conversation cleared', 'info');">Clear Chat</button>
+                </div>
+              </div>
+
+              <!-- Messages Thread -->
+              <div class="ai-messages-scroll" id="aiMessagesScroll">
+                <!-- Chat messages rendered dynamically -->
+              </div>
+
+              <!-- Live Thinking / Working Indicator -->
+              <div id="aiThinkingIndicator" style="display:none; padding:10px 16px; background:#f8fafc; border-top:1px solid #e2e8f0; align-items:center; gap:8px; font-size:12px; color:var(--color-ai-indigo);">
+                <div class="agentic-step-icon spinning">⚙</div>
+                <span>Analyzing store inventory, velocity & calculating recommendations...</span>
+              </div>
+
+              <!-- Input Area & Quick Suggestions -->
+              <div class="ai-chat-footer">
+                <div class="quick-prompts-row">
+                  <span class="prompt-chip" data-prompt="Anna, rice stock entha undi?">🗣 "Anna, rice stock entha undi?"</span>
+                  <span class="prompt-chip" data-prompt="What are my low stock items today?">📦 Low stock items</span>
+                  <span class="prompt-chip" data-prompt="Cooking oil margin and distributor deals">🛢 Cooking oil deals</span>
+                  <span class="prompt-chip" data-prompt="Which customers have high khata balance?">📒 Khata balances</span>
+                  <span class="prompt-chip" data-prompt="Generate weekly sales report">📊 Sales summary</span>
+                </div>
+
+                <div class="chat-input-wrapper">
+                  <input type="text" id="aiChatInput" class="ai-input-field" placeholder="Ask in English, Telugu (తెలుగు), or Hindi (हिंदी)...">
+                  <button id="aiChatSendBtn" class="ai-send-btn" title="Send message">➔</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right: Beyond Presence Avatar & LiveKit Voice AI Panel -->
+            <div class="ai-context-column">
+              <!-- Beyond Presence Avatar Card -->
+              <div class="avatar-card" id="beyondPresenceAvatarCard">
+                <div class="avatar-card-header">
+                  <span>Beyond Presence Avatar</span>
+                  <span class="badge badge-ai">Interactive</span>
+                </div>
+                <div class="avatar-display-area">
+                  <div class="avatar-circle-frame">
+                    <div class="avatar-speaking-glow"></div>
+                    <!-- Professional Retail Business Avatar SVG -->
+                    <svg class="avatar-img-art" viewBox="0 0 100 100" fill="none">
+                      <circle cx="50" cy="50" r="48" fill="#1e293b"/>
+                      <circle cx="50" cy="38" r="18" fill="#fbcfe8"/>
+                      <path d="M50 34c4 0 7 2 7 6s-3 6-7 6-7-2-7-6 3-6 7-6z" fill="#f472b6" opacity="0.3"/>
+                      <path d="M26 84c0-14 11-24 24-24s24 10 24 24H26z" fill="#3b82f6"/>
+                      <path d="M42 60l8 12 8-12" stroke="#ffffff" stroke-width="2" stroke-linecap="round"/>
+                      <circle cx="43" cy="36" r="2.5" fill="#0f172a"/>
+                      <circle cx="57" cy="36" r="2.5" fill="#0f172a"/>
+                      <path d="M46 44q4 3 8 0" stroke="#0f172a" stroke-width="2" stroke-linecap="round"/>
+                      <circle cx="50" cy="50" r="48" stroke="#6366f1" stroke-width="2"/>
+                    </svg>
+                  </div>
+                  <div class="avatar-caption-box" id="avatarCaptionText">
+                    "Good morning. Sharma Kirana Store had ₹18,450 in revenue today."
+                  </div>
+                </div>
+              </div>
+
+              <!-- LiveKit Voice AI Card -->
+              <div class="voice-ai-card">
+                <span class="voice-badge-tag">✦ LiveKit Voice AI Session</span>
+                <div class="voice-status-title" id="voiceStatusTitle" data-i18n="tapToSpeak">Tap to Speak</div>
+                <div class="voice-status-subtitle" id="voiceStatusSubtitle">LiveKit Real-time Voice Session Active</div>
+
+                <!-- Central Microphone Button -->
+                <div class="voice-mic-trigger" id="voiceMicBtn" title="Click to speak">
+                  <svg style="width:30px; height:30px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"/></svg>
+                </div>
+
+                <!-- Waveform Audio Visualizer -->
+                <div class="voice-waveform-container" id="voiceWaveform">
+                  <div class="waveform-bar"></div>
+                  <div class="waveform-bar"></div>
+                  <div class="waveform-bar"></div>
+                  <div class="waveform-bar"></div>
+                  <div class="waveform-bar"></div>
+                  <div class="waveform-bar"></div>
+                  <div class="waveform-bar"></div>
+                  <div class="waveform-bar"></div>
+                </div>
+
+                <div class="voice-controls-row">
+                  <button class="btn btn-sm btn-secondary" id="voiceInterruptBtn" data-i18n="interruptVoice">Interrupt</button>
+                  <button class="btn btn-sm btn-secondary" id="voiceMuteBtn" data-i18n="muteVoice">Mute</button>
+                </div>
+              </div>
+
+              <!-- Live Store Context / Telemetry -->
+              <div class="telemetry-card">
+                <div class="telemetry-header">
+                  <span>Store Live Telemetry</span>
+                  <span style="color:var(--color-success); font-weight:700;">LIVE</span>
+                </div>
+                <div class="telemetry-item">
+                  <span>Current Shift</span>
+                  <span class="telemetry-item-val">Morning Counter (Ravi)</span>
+                </div>
+                <div class="telemetry-item">
+                  <span>Reorder Threshold</span>
+                  <span class="telemetry-item-val">Dynamic 7-Day Velocity</span>
+                </div>
+                <div class="telemetry-item">
+                  <span>Primary Distributor</span>
+                  <span class="telemetry-item-val">ABC Distributors (Rice)</span>
+                </div>
+                <div class="telemetry-item">
+                  <span>Payment Gateway</span>
+                  <span class="telemetry-item-val">ICICI UPI & Cash Drawer</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==================================================================
+             VIEW 3: PRODUCTS PAGE
+             ================================================================== -->
+        <section class="page-view" id="view-products">
+          <div class="page-header">
+            <div class="page-title-group">
+              <h1 class="page-title">Product Catalogue Management</h1>
+              <p class="page-subtitle">Manage wholesale prices, retail MRPs, SKU codes, and supplier mappings</p>
+            </div>
+            <div class="page-actions">
+              <button class="btn btn-primary" onclick="window.shopUI.openAddProductModal()">+ Add New Product</button>
+            </div>
+          </div>
+
+          <!-- FILTER TOOLBAR -->
+          <div class="filter-toolbar">
+            <div class="filter-group-left">
+              <div class="filter-search-box">
+                <input type="text" id="prodSearchInput" class="filter-search-input" placeholder="Search product name or SKU...">
+              </div>
+              <select id="prodCategoryFilter" class="filter-select">
+                <option value="All">All Categories</option>
+                <option value="Grains & Rice">Grains & Rice</option>
+                <option value="Flours & Atta">Flours & Atta</option>
+                <option value="Edible Oils">Edible Oils</option>
+                <option value="Pulses & Dal">Pulses & Dal</option>
+                <option value="Dairy">Dairy</option>
+                <option value="Home Care">Home Care</option>
+                <option value="Salt & Sugar">Salt & Sugar</option>
+              </select>
+              <select id="prodStatusFilter" class="filter-select">
+                <option value="All">All Stock Levels</option>
+                <option value="healthy">Healthy Stock</option>
+                <option value="low">Low Stock</option>
+                <option value="out">Out of Stock</option>
+              </select>
+            </div>
+            <button class="btn btn-sm btn-secondary" onclick="window.shopUI.exportReport('csv')">Export CSV</button>
+          </div>
+
+          <!-- PRODUCTS DATA TABLE -->
+          <div class="table-container">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Product & SKU</th>
+                  <th>Category</th>
+                  <th>Buy Price</th>
+                  <th>Sell Price</th>
+                  <th>Current Stock</th>
+                  <th>Min Level</th>
+                  <th>Primary Supplier</th>
+                  <th>Status</th>
+                  <th style="text-align:right;">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="productsTableBody">
+                <!-- Rendered by app.js -->
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- ==================================================================
+             VIEW 4: INVENTORY PAGE
+             ================================================================== -->
+        <section class="page-view" id="view-inventory">
+          <div class="page-header">
+            <div class="page-title-group">
+              <h1 class="page-title">Inventory & Stock Tracking</h1>
+              <p class="page-subtitle">Real-time stock velocity, safety buffers, and AI automated reorder suggestions</p>
+            </div>
+            <div class="page-actions">
+              <button class="btn btn-secondary" onclick="window.shopUI.exportReport('csv')">Export Stock Audit</button>
+              <button class="btn btn-primary" onclick="window.shopUI.openRestockModal('PROD-001')">Restock Sona Masoori Rice</button>
+            </div>
+          </div>
+
+          <!-- SUMMARY KPI CARDS -->
+          <div class="kpi-grid">
+            <div class="kpi-card">
+              <span class="kpi-title">Total Active SKUs</span>
+              <div class="kpi-value">15</div>
+              <span class="trend-subtext">All store categories</span>
+            </div>
+            <div class="kpi-card">
+              <span class="kpi-title">Healthy Stock</span>
+              <div class="kpi-value" style="color:var(--color-success-dark);" id="invHealthyCardVal">8</div>
+              <span class="trend-subtext">Adequate buffer > 14 days</span>
+            </div>
+            <div class="kpi-card">
+              <span class="kpi-title">Low Stock Alert</span>
+              <div class="kpi-value" style="color:var(--color-warning-dark);" id="invLowCardVal">6</div>
+              <span class="badge badge-warning">Action recommended</span>
+            </div>
+            <div class="kpi-card">
+              <span class="kpi-title">Out of Stock</span>
+              <div class="kpi-value" style="color:var(--color-danger);" id="invOutCardVal">1</div>
+              <span class="badge badge-danger">Maggi 70g</span>
+            </div>
+          </div>
+
+          <!-- INVENTORY TABLE WITH SALES VELOCITY & AI RECOMMENDATIONS -->
+          <div class="filter-toolbar">
+            <div class="filter-group-left">
+              <div class="filter-search-box">
+                <input type="text" id="invSearchInput" class="filter-search-input" placeholder="Filter inventory items...">
+              </div>
+              <select id="invStatusFilter" class="filter-select">
+                <option value="All">All Statuses</option>
+                <option value="low">Low Stock Only</option>
+                <option value="out">Out of Stock Only</option>
+                <option value="healthy">Healthy Stock</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="table-container">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Product</th>
+                  <th>Current Stock</th>
+                  <th>Safety Min Level</th>
+                  <th>Sales Velocity</th>
+                  <th>Stock Status</th>
+                  <th>Last Movement</th>
+                  <th style="text-align:right;">Restock Recommendation</th>
+                </tr>
+              </thead>
+              <tbody id="inventoryTableBody">
+                <!-- Rendered by app.js -->
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- ==================================================================
+             VIEW 5: SALES & BILLING PAGE
+             ================================================================== -->
+        <section class="page-view" id="view-sales">
+          <div class="page-header">
+            <div class="page-title-group">
+              <h1 class="page-title">Sales & Transaction Management</h1>
+              <p class="page-subtitle">Point of Sale ledger, daily collections, digital UPI and Khata receipts</p>
+            </div>
+            <div class="page-actions">
+              <button class="btn btn-secondary" onclick="window.shopUI.exportReport('excel')">Export Sales Book</button>
+              <button class="btn btn-primary" onclick="window.shopUI.openNewSaleModal()">+ New POS Transaction</button>
+            </div>
+          </div>
+
+          <!-- KPI ROW -->
+          <div class="kpi-grid">
+            <div class="kpi-card">
+              <span class="kpi-title">Today's Revenue</span>
+              <div class="kpi-value" id="salesRevKpi">₹18,450</div>
+              <span class="trend-subtext">+12.4% vs yesterday</span>
+            </div>
+            <div class="kpi-card">
+              <span class="kpi-title">Total Bills</span>
+              <div class="kpi-value" id="salesBillsKpi">47</div>
+              <span class="trend-subtext">Cash: 19 • UPI: 22 • Khata: 6</span>
+            </div>
+            <div class="kpi-card">
+              <span class="kpi-title">Average Order Value (AOV)</span>
+              <div class="kpi-value">₹392</div>
+              <span class="trend-subtext">Peak bill: ₹3,076</span>
+            </div>
+            <div class="kpi-card">
+              <span class="kpi-title">Refunds & Returns</span>
+              <div class="kpi-value">₹0</div>
+              <span class="badge badge-success">0% returns</span>
+            </div>
+          </div>
+
+          <!-- TRANSACTIONS TABLE -->
+          <div class="table-container">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Order ID</th>
+                  <th>Time</th>
+                  <th>Customer</th>
+                  <th>Purchased Items</th>
+                  <th>Total Amount</th>
+                  <th>Payment Mode</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="salesTableBody">
+                <!-- Rendered by app.js -->
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- ==================================================================
+             VIEW 6: CUSTOMERS & KHATA (LEDGER) PAGE
+             ================================================================== -->
+        <section class="page-view" id="view-customers">
+          <div class="page-header">
+            <div class="page-title-group">
+              <h1 class="page-title">Customer Information & Khata Ledger</h1>
+              <p class="page-subtitle">Track regular customers, purchase frequency, store credit (Udhar), and WhatsApp reminders</p>
+            </div>
+            <div class="page-actions">
+              <button class="btn btn-secondary" onclick="window.shopUI.showToast('WhatsApp Khata payment reminders queued for 2 customers', 'success')">Send Khata Reminders</button>
+            </div>
+          </div>
+
+          <div class="table-container">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Customer Name & Phone</th>
+                  <th>Customer Type</th>
+                  <th>Total Orders</th>
+                  <th>Lifetime Spend</th>
+                  <th>Khata Balance (Credit)</th>
+                  <th>Last Visit</th>
+                  <th style="text-align:right;">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="customersTableBody">
+                <!-- Rendered by app.js -->
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- ==================================================================
+             VIEW 7: SUPPLIERS DIRECTORY PAGE
+             ================================================================== -->
+        <section class="page-view" id="view-suppliers">
+          <div class="page-header">
+            <div class="page-title-group">
+              <h1 class="page-title">Distributor & Supplier Management</h1>
+              <p class="page-subtitle">Manage wholesale suppliers, purchase order histories, and delivery schedules</p>
+            </div>
+            <div class="page-actions">
+              <button class="btn btn-primary" onclick="window.shopUI.openRestockModal('PROD-001')">+ Create Purchase Order</button>
+            </div>
+          </div>
+
+          <div class="suppliers-grid" id="suppliersGrid">
+            <!-- Rendered by app.js -->
+          </div>
+        </section>
+
+        <!-- ==================================================================
+             VIEW 8: ANALYTICS PAGE
+             ================================================================== -->
+        <section class="page-view" id="view-analytics">
+          <div class="page-header">
+            <div class="page-title-group">
+              <h1 class="page-title">Business Analytics & Demand Forecasts</h1>
+              <p class="page-subtitle">Deep dive into sales trends, product profitability margins, and customer retention</p>
+            </div>
+          </div>
+
+          <div class="dashboard-grid-two-col">
+            <!-- Product Demand Bar Chart Card -->
+            <div class="chart-card">
+              <div class="chart-header">
+                <div class="chart-title-wrap">
+                  <span class="chart-title">Weekly Product Sales Velocity (Units)</span>
+                  <span class="chart-subtitle">Demand comparison across core staples</span>
+                </div>
+              </div>
+              <div class="chart-body">
+                <div style="display:flex; flex-direction:column; gap:12px;">
+                  <div>
+                    <div style="display:flex; justify-content:space-between; font-size:12px; margin-bottom:4px;">
+                      <span>Sona Masoori Rice (25kg)</span>
+                      <strong>65 bags/wk (+21%)</strong>
+                    </div>
+                    <div class="progress-bar-wrap"><div class="progress-bar-fill progress-fill-blue" style="width:85%;"></div></div>
+                  </div>
+                  <div>
+                    <div style="display:flex; justify-content:space-between; font-size:12px; margin-bottom:4px;">
+                      <span>Fortune Sunflower Oil (1L)</span>
+                      <strong>59 pouches/wk (+18%)</strong>
+                    </div>
+                    <div class="progress-bar-wrap"><div class="progress-bar-fill progress-fill-amber" style="width:78%;"></div></div>
+                  </div>
+                  <div>
+                    <div style="display:flex; justify-content:space-between; font-size:12px; margin-bottom:4px;">
+                      <span>Tata Salt (1kg)</span>
+                      <strong>78 pkts/wk (+15%)</strong>
+                    </div>
+                    <div class="progress-bar-wrap"><div class="progress-bar-fill progress-fill-emerald" style="width:92%;"></div></div>
+                  </div>
+                  <div>
+                    <div style="display:flex; justify-content:space-between; font-size:12px; margin-bottom:4px;">
+                      <span>Aashirvaad Atta (10kg)</span>
+                      <strong>34 bags/wk (+8%)</strong>
+                    </div>
+                    <div class="progress-bar-wrap"><div class="progress-bar-fill progress-fill-blue" style="width:55%;"></div></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Profitability Margin Card -->
+            <div class="chart-card">
+              <div class="chart-header">
+                <div class="chart-title-wrap">
+                  <span class="chart-title">Gross Profit Margin Contribution</span>
+                  <span class="chart-subtitle">Profit distribution by category</span>
+                </div>
+              </div>
+              <div class="chart-body">
+                <div style="display:flex; flex-direction:column; gap:12px;">
+                  <div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid var(--color-border-subtle);">
+                    <span>Beverages & Tea</span>
+                    <strong style="color:var(--color-success-dark);">38.2% Margin (High)</strong>
+                  </div>
+                  <div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid var(--color-border-subtle);">
+                    <span>Personal & Home Care</span>
+                    <strong style="color:var(--color-success-dark);">32.5% Margin</strong>
+                  </div>
+                  <div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid var(--color-border-subtle);">
+                    <span>Pulses & Whole Spices</span>
+                    <strong>26.4% Margin</strong>
+                  </div>
+                  <div style="display:flex; justify-content:space-between; padding:8px 0;">
+                    <span>Bulk Grains & Rice</span>
+                    <strong>16.2% Margin (Volume Driver)</strong>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==================================================================
+             VIEW 9: REPORTS PAGE
+             ================================================================== -->
+        <section class="page-view" id="view-reports">
+          <div class="page-header">
+            <div class="page-title-group">
+              <h1 class="page-title">Executive Business Reports</h1>
+              <p class="page-subtitle">AI-generated daily, weekly, and monthly summaries with exportable ledger spreadsheets</p>
+            </div>
+            <div class="page-actions">
+              <button class="btn btn-secondary" onclick="window.shopUI.exportReport('csv')">Export CSV</button>
+              <button class="btn btn-secondary" onclick="window.shopUI.exportReport('excel')">Export Excel</button>
+              <button class="btn btn-primary" onclick="window.shopUI.exportReport('pdf')">Print PDF Report</button>
+            </div>
+          </div>
+
+          <div class="report-paper">
+            <div class="report-header-banner">
+              <div class="report-store-brand">
+                <span class="report-store-name">Sharma Kirana Store</span>
+                <span class="report-meta-text">GSTIN: 36AABCS1429B1Z8 • Hyderabad, Telangana</span>
+              </div>
+              <div class="report-badge-box">
+                <span class="badge badge-ai" style="font-size:12px; padding:4px 10px;">✦ Daily AI Executive Report</span>
+                <div style="font-size:11px; color:var(--color-text-muted); margin-top:3px;">Generated for Oct 24, 2024</div>
+              </div>
+            </div>
+
+            <div class="report-summary-box" id="reportSummaryContent">
+              <!-- Rendered by app.js -->
+            </div>
+
+            <!-- Key Financial Breakdown -->
+            <div class="kpi-grid">
+              <div class="kpi-card">
+                <span class="kpi-title">Gross Revenue</span>
+                <div class="kpi-value">₹18,450</div>
+                <span class="trend-subtext">47 total transactions</span>
+              </div>
+              <div class="kpi-card">
+                <span class="kpi-title">Estimated Gross Margin</span>
+                <div class="kpi-value" style="color:var(--color-success-dark);">₹6,240</div>
+                <span class="trend-subtext">33.8% profitability</span>
+              </div>
+              <div class="kpi-card">
+                <span class="kpi-title">Outstanding Khata</span>
+                <div class="kpi-value" style="color:var(--color-warning-dark);">₹8,750</div>
+                <span class="trend-subtext">3 regular accounts</span>
+              </div>
+            </div>
+
+            <!-- Top Business Recommendations -->
+            <div class="card" style="border: 1px solid #c7d2fe; background: var(--color-ai-surface);">
+              <div class="card-header" style="background:transparent; border-bottom:1px solid #c7d2fe;">
+                <span style="font-weight:700; color:var(--color-ai-indigo); font-size:13.5px;">✦ AI Actionable Business Recommendations</span>
+              </div>
+              <div class="card-body" style="display:flex; flex-direction:column; gap:10px; font-size:13px;">
+                <p>1. <strong>Replenish Sona Masoori Rice:</strong> Place an order for 100 kg with ABC Distributors before Friday to avoid weekend stockout.</p>
+                <p>2. <strong>Claim Cooking Oil Rebate:</strong> Bulk order 25 pouches of Fortune Oil from Balaji Trading Co to secure the 4% distributor margin bonus.</p>
+                <p>3. <strong>Khata Settlement:</strong> Send automated WhatsApp settlement reminders to Mohammed Irfan (₹4,500) and Suresh Gupta (₹2,800).</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==================================================================
+             VIEW 10: NOTIFICATIONS CENTER
+             ================================================================== -->
+        <section class="page-view" id="view-notifications">
+          <div class="page-header">
+            <div class="page-title-group">
+              <h1 class="page-title">Notification & Alert Center</h1>
+              <p class="page-subtitle">Critical low-stock alerts, supplier confirmations, and AI business recommendations</p>
+            </div>
+            <div class="page-actions">
+              <button class="btn btn-secondary" onclick="window.shopStore.markAllNotificationsRead(); window.shopUI.showToast('All notifications marked as read', 'info');">Mark All Read</button>
+            </div>
+          </div>
+
+          <div style="display:flex; flex-direction:column; gap:var(--space-3);" id="notificationsList">
+            <!-- Rendered by app.js -->
+          </div>
+        </section>
+
+        <!-- ==================================================================
+             VIEW 11: SETTINGS & ROLE-BASED ACCESS
+             ================================================================== -->
+        <section class="page-view" id="view-settings">
+          <div class="page-header">
+            <div class="page-title-group">
+              <h1 class="page-title">Store Settings & Role Management</h1>
+              <p class="page-subtitle">Store configuration, GSTIN details, user permissions, and security audit log</p>
+            </div>
+          </div>
+
+          <div class="settings-grid-layout">
+            <!-- Settings Navigation -->
+            <div class="settings-nav-sidebar">
+              <button class="settings-tab-btn active" onclick="this.classList.add('active'); document.getElementById('settingsRolePane').classList.add('active');">Store & Roles</button>
+            </div>
+
+            <!-- Settings Content Pane -->
+            <div class="settings-tab-pane active" id="settingsRolePane">
+              <!-- Role Switcher -->
+              <div class="card">
+                <div class="card-header">
+                  <div class="card-title">Role-Based Access Control (RBAC)</div>
+                  <span class="badge badge-ai">Security Matrix</span>
+                </div>
+                <div class="card-body">
+                  <div class="form-group" style="max-width:320px; margin-bottom:var(--space-4);">
+                    <label class="form-label">Active Logged-in User Role</label>
+                    <select id="settingsRoleSelect" class="form-select">
+                      <option value="owner">Owner (Full Admin & Financial Access)</option>
+                      <option value="manager">Manager (Inventory & Stock Reorders)</option>
+                      <option value="staff">Staff (POS Billing Only)</option>
+                      <option value="viewer">Viewer (Read-only)</option>
+                    </select>
+                    <span style="font-size:11px; color:var(--color-text-muted); margin-top:2px;">Switching roles immediately updates action permissions across the application.</span>
+                  </div>
+
+                  <!-- Permission Table -->
+                  <div class="table-container" style="border:none;">
+                    <table class="data-table permission-matrix-table">
+                      <thead>
+                        <tr>
+                          <th>Action / Module</th>
+                          <th>Owner</th>
+                          <th>Manager</th>
+                          <th>Staff</th>
+                          <th>Viewer</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>View Real-time Revenue & Profit</td>
+                          <td><span class="check-icon-active">✓</span></td>
+                          <td><span class="check-icon-active">✓</span></td>
+                          <td><span class="check-icon-inactive">—</span></td>
+                          <td><span class="check-icon-inactive">—</span></td>
+                        </tr>
+                        <tr>
+                          <td>Create & Approve Purchase Orders (₹)</td>
+                          <td><span class="check-icon-active">✓</span></td>
+                          <td><span class="check-icon-active">✓</span></td>
+                          <td><span class="check-icon-inactive">—</span></td>
+                          <td><span class="check-icon-inactive">—</span></td>
+                        </tr>
+                        <tr>
+                          <td>Add / Edit Product Catalogue</td>
+                          <td><span class="check-icon-active">✓</span></td>
+                          <td><span class="check-icon-active">✓</span></td>
+                          <td><span class="check-icon-inactive">—</span></td>
+                          <td><span class="check-icon-inactive">—</span></td>
+                        </tr>
+                        <tr>
+                          <td>Record POS Sales & Customer Khata</td>
+                          <td><span class="check-icon-active">✓</span></td>
+                          <td><span class="check-icon-active">✓</span></td>
+                          <td><span class="check-icon-active">✓</span></td>
+                          <td><span class="check-icon-inactive">—</span></td>
+                        </tr>
+                        <tr>
+                          <td>Use AI Natural Language Business Assistant</td>
+                          <td><span class="check-icon-active">✓</span></td>
+                          <td><span class="check-icon-active">✓</span></td>
+                          <td><span class="check-icon-active">✓</span></td>
+                          <td><span class="check-icon-active">✓</span></td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Store Profile Form -->
+              <div class="card">
+                <div class="card-header">
+                  <div class="card-title">Store Profile & Legal Information</div>
+                </div>
+                <div class="card-body">
+                  <div style="display:grid; grid-template-columns: repeat(2, 1fr); gap:14px;">
+                    <div class="form-group">
+                      <label class="form-label">Store Legal Trade Name</label>
+                      <input type="text" class="form-input" value="Sharma Kirana Store">
+                    </div>
+                    <div class="form-group">
+                      <label class="form-label">GSTIN / Tax ID</label>
+                      <input type="text" class="form-input" value="36AABCS1429B1Z8">
+                    </div>
+                    <div class="form-group">
+                      <label class="form-label">Owner Name</label>
+                      <input type="text" class="form-input" value="Ravi Sharma">
+                    </div>
+                    <div class="form-group">
+                      <label class="form-label">Contact Phone</label>
+                      <input type="text" class="form-input" value="+91 98490 23145">
+                    </div>
+                    <div class="form-group" style="grid-column: span 2;">
+                      <label class="form-label">Address</label>
+                      <input type="text" class="form-input" value="Shop #4, Near Hanuman Temple, KPHB Phase 3, Hyderabad, Telangana - 500072">
+                    </div>
+                  </div>
+                </div>
+                <div class="card-footer">
+                  <button class="btn btn-primary" onclick="window.shopUI.showToast('Store profile details saved', 'success')">Save Changes</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <!-- MOBILE BOTTOM NAVIGATION -->
+      <nav class="mobile-bottom-nav">
+        <a class="mobile-nav-item active" data-view="overview">
+          <span>🏠</span>
+          <span>Overview</span>
+        </a>
+        <a class="mobile-nav-item ai-mobile" data-view="ai-assistant">
+          <span>✦</span>
+          <span>AI Assist</span>
+        </a>
+        <a class="mobile-nav-item" data-view="inventory">
+          <span>📦</span>
+          <span>Inventory</span>
+        </a>
+        <a class="mobile-nav-item" data-view="sales">
+          <span>💰</span>
+          <span>Sales</span>
+        </a>
+        <a class="mobile-nav-item" data-view="notifications">
+          <span>🔔</span>
+          <span>Alerts</span>
+        </a>
+      </nav>
+    </div>
+  </div>
+
+  <!-- ======================================================================
+       MODALS & OVERLAYS
+       ====================================================================== -->
+
+  <!-- ADD PRODUCT MODAL -->
+  <div class="modal-backdrop" id="addProductModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <span class="modal-title">Add New Product to Catalogue</span>
+        <button class="modal-close-btn" onclick="window.shopUI.closeAddProductModal()">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="form-label">Product Name *</label>
+          <input type="text" id="prodNameInput" class="form-input" placeholder="e.g., Sona Masoori Rice (25kg Bag)">
+        </div>
+        <div style="display:grid; grid-template-columns: repeat(2, 1fr); gap:10px;">
+          <div class="form-group">
+            <label class="form-label">Category</label>
+            <select id="prodCategorySelect" class="form-select">
+              <option value="Grains & Rice">Grains & Rice</option>
+              <option value="Flours & Atta">Flours & Atta</option>
+              <option value="Edible Oils">Edible Oils</option>
+              <option value="Pulses & Dal">Pulses & Dal</option>
+              <option value="Dairy">Dairy</option>
+              <option value="Home Care">Home Care</option>
+              <option value="Personal Care">Personal Care</option>
+              <option value="Salt & Sugar">Salt & Sugar</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Unit Type</label>
+            <input type="text" id="prodUnitInput" class="form-input" value="bags">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Wholesale Cost (Buy Price)</label>
+            <div class="input-with-currency">
+              <span class="currency-symbol-addon">₹</span>
+              <input type="number" id="prodPurchasePrice" class="form-input" value="1250">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Retail Price (Selling Price)</label>
+            <div class="input-with-currency">
+              <span class="currency-symbol-addon">₹</span>
+              <input type="number" id="prodSellingPrice" class="form-input" value="1350">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Initial Stock Count</label>
+            <input type="number" id="prodStockInput" class="form-input" value="18">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Minimum Safety Stock</label>
+            <input type="number" id="prodMinStockInput" class="form-input" value="30">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Supplier</label>
+          <select id="prodSupplierSelect" class="form-select">
+            <option value="ABC Distributors">ABC Distributors</option>
+            <option value="Balaji Trading Co">Balaji Trading Co</option>
+            <option value="Sri Lakshmi Wholesalers">Sri Lakshmi Wholesalers</option>
+            <option value="Amul Co-op Depot">Amul Co-op Depot</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="window.shopUI.closeAddProductModal()">Cancel</button>
+        <button class="btn btn-primary" onclick="window.shopUI.handleSaveProduct()">Save Product</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- RESTOCK RECOMMENDATION MODAL -->
+  <div class="modal-backdrop" id="restockModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <span class="modal-title">AI Restocking Recommendation</span>
+        <button class="modal-close-btn" onclick="window.shopUI.closeRestockModal()">✕</button>
+      </div>
+      <div class="modal-body">
+        <div style="display:flex; flex-direction:column; gap:12px;">
+          <div>
+            <h3 id="restockProdName" style="font-size:16px; font-weight:700;">Sona Masoori Raw Rice (25kg Bag)</h3>
+            <span id="restockProdSku" style="font-size:11px; color:var(--color-text-muted); font-family:var(--font-family-mono);">RIC-SONA-25K</span>
+          </div>
+
+          <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:8px; background:var(--color-canvas); padding:10px; border-radius:var(--radius-md);">
+            <div>
+              <span style="font-size:10px; color:var(--color-text-muted);">Current Stock</span>
+              <div id="restockCurrentStock" style="font-weight:700;">18 bags</div>
+            </div>
+            <div>
+              <span style="font-size:10px; color:var(--color-text-muted);">Safety Minimum</span>
+              <div id="restockMinStock" style="font-weight:700;">30 bags</div>
+            </div>
+            <div>
+              <span style="font-size:10px; color:var(--color-text-muted);">Daily Velocity</span>
+              <div id="restockVelocity" style="font-weight:700; color:var(--color-brand-accent);">9.3 bags/day</div>
+            </div>
+          </div>
+
+          <div class="form-group" style="margin-top:4px;">
+            <label class="form-label">Recommended Replenishment Quantity</label>
+            <input type="number" id="restockRecommendedQty" class="form-input" value="100">
+            <span style="font-size:11px; color:var(--color-text-muted); margin-top:2px;">Based on 30-day velocity and festival weekend surge (+21%).</span>
+          </div>
+
+          <div style="display:flex; justify-content:space-between; align-items:center; background:#f5f3ff; border:1px solid #c7d2fe; padding:10px 14px; border-radius:var(--radius-md);">
+            <div>
+              <span style="font-size:11px; color:var(--color-ai-indigo); font-weight:600;">Supplier: <span id="restockSupplier">ABC Distributors</span></span>
+              <div style="font-size:11px; color:var(--color-text-muted);">Payment terms: Net 7 Days</div>
+            </div>
+            <div style="text-align:right;">
+              <span style="font-size:10px; color:var(--color-text-muted);">Total Cost</span>
+              <div id="restockEstCost" style="font-size:16px; font-weight:700; color:var(--color-primary);">₹8,400</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="window.shopUI.closeRestockModal()">Cancel</button>
+        <button class="btn btn-ai" id="restockApproveBtn">Approve & Transmit Order</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECURITY CONFIRMATION MODAL (High-Impact Financial Actions) -->
+  <div class="modal-backdrop" id="securityConfirmModal">
+    <div class="modal-card" style="max-width:440px;">
+      <div class="modal-header">
+        <span class="modal-title" id="secConfirmTitle">Confirm Financial Action</span>
+        <button class="modal-close-btn" id="secCancelBtn">✕</button>
+      </div>
+      <div class="modal-body" style="display:flex; flex-direction:column; gap:12px; text-align:center;">
+        <div style="width:48px; height:48px; border-radius:50%; background:var(--color-warning-surface); color:var(--color-warning-dark); display:flex; align-items:center; justify-content:center; margin:0 auto; font-size:22px;">
+          🛡️
+        </div>
+        <p id="secConfirmMsg" style="font-size:13.5px; color:var(--color-text-primary); font-weight:600;">
+          Are you sure you want to approve purchase order?
+        </p>
+        <div id="secConfirmAmount" style="font-size:24px; font-weight:800; color:var(--color-primary);" class="tabular-nums">
+          ₹8,400
+        </div>
+        <p id="secConfirmDetails" style="font-size:12px; color:var(--color-text-muted);">
+          Quantity: 100 kg • Terms: Net 7 Days Credit
+        </p>
+      </div>
+      <div class="modal-footer" style="justify-content:center; gap:10px;">
+        <button class="btn btn-secondary" onclick="document.getElementById('securityConfirmModal').classList.remove('active')">Review Later</button>
+        <button class="btn btn-primary" id="secConfirmBtn">Confirm & Transmit</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- CUSTOMER PROFILE DRAWER -->
+  <div class="drawer-backdrop" id="customerDrawer">
+    <div class="drawer-panel">
+      <div class="drawer-header">
+        <span style="font-family:var(--font-family-display); font-weight:700; font-size:16px;">Customer Khata Profile</span>
+        <button class="modal-close-btn" onclick="window.shopUI.closeCustomerDrawer()">✕</button>
+      </div>
+      <div class="drawer-body">
+        <div class="customer-profile-card">
+          <div class="customer-avatar-header">
+            <div class="customer-big-avatar" id="custDrawerInitials">RK</div>
+            <div class="customer-meta-wrap">
+              <span class="customer-full-name" id="custDrawerName">Ramesh Kumar (Teacher)</span>
+              <span class="customer-phone-sub" id="custDrawerPhone">+91 98492 44102</span>
+              <span class="badge badge-neutral" id="custDrawerType" style="margin-top:4px; align-self:flex-start;">Regular (Khata)</span>
+            </div>
+          </div>
+
+          <div class="customer-stat-cards">
+            <div class="cust-mini-stat">
+              <span class="cust-stat-label">Total Orders</span>
+              <span class="cust-stat-val" id="custDrawerOrders">42</span>
+            </div>
+            <div class="cust-mini-stat">
+              <span class="cust-stat-label">Lifetime Spend</span>
+              <span class="cust-stat-val" id="custDrawerSpend">₹38,450</span>
+            </div>
+            <div class="cust-mini-stat">
+              <span class="cust-stat-label">Current Khata (Udhar)</span>
+              <span class="cust-stat-val" style="color:var(--color-danger);" id="custDrawerKhata">₹1,450</span>
+            </div>
+            <div class="cust-mini-stat">
+              <span class="cust-stat-label">Last Purchase</span>
+              <span class="cust-stat-val" style="font-size:12px;" id="custDrawerLastPurchase">Today, 10:20 AM</span>
+            </div>
+          </div>
+
+          <div class="ai-customer-insight-box">
+            <span class="ai-cust-badge">✦ AI Purchase Pattern Insight</span>
+            <p class="ai-cust-text" id="custDrawerInsight">
+              "This customer typically purchases grocery products every 10–14 days. Usually clears ledger account on the 5th of each month."
+            </p>
+          </div>
+
+          <div style="display:flex; flex-direction:column; gap:8px; margin-top:6px;">
+            <button class="btn btn-secondary" style="width:100%;" onclick="window.shopUI.showToast('WhatsApp ledger statement sent to customer', 'success')">Send WhatsApp Statement</button>
+            <button class="btn btn-primary" style="width:100%;" onclick="window.shopUI.openNewSaleModal()">+ Add Bill to Khata</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NEW SALE / POS BILLING MODAL -->
+  <div class="modal-backdrop" id="newSaleModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <span class="modal-title">Quick POS Sale & Billing</span>
+        <button class="modal-close-btn" onclick="window.shopUI.closeNewSaleModal()">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="form-label">Customer Name</label>
+          <input type="text" id="saleCustomerInput" class="form-input" placeholder="Walk-in or Regular Customer">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Items Summary</label>
+          <input type="text" id="saleItemsSummary" class="form-input" placeholder="e.g., Sona Masoori Rice, Tata Salt">
+        </div>
+        <div style="display:grid; grid-template-columns: repeat(2, 1fr); gap:10px;">
+          <div class="form-group">
+            <label class="form-label">Bill Amount (₹) *</label>
+            <div class="input-with-currency">
+              <span class="currency-symbol-addon">₹</span>
+              <input type="number" id="saleAmountInput" class="form-input" placeholder="0">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Payment Method</label>
+            <select id="salePaymentSelect" class="form-select">
+              <option value="UPI (PhonePe)">UPI (PhonePe)</option>
+              <option value="UPI (Google Pay)">UPI (Google Pay)</option>
+              <option value="Cash">Cash</option>
+              <option value="Khata / Ledger">Khata / Ledger (Credit)</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="window.shopUI.closeNewSaleModal()">Cancel</button>
+        <button class="btn btn-primary" onclick="window.shopUI.handleSaveSale()">Complete Sale</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICATION CONTAINER -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Application Logic Scripts -->
+  <script src="js/data.js"></script>
+  <script src="js/translations.js"></script>
+  <script src="js/state.js"></script>
+  <script src="js/ai-engine.js"></script>
+  <script src="js/ui-controllers.js"></script>
+  <script src="js/demo-flow.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

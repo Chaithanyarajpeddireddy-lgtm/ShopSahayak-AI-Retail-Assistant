@@ -1,0 +1,483 @@
+/* ==========================================================================
+   ShopSahayak - Page Specific Styles
+   Dashboard, Products, Inventory, Sales, Customers, Suppliers, Reports, Settings
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   DASHBOARD SECTION
+   -------------------------------------------------------------------------- */
+.dashboard-grid-two-col {
+  display: grid;
+  grid-template-columns: 1.35fr 1fr;
+  gap: var(--space-5);
+}
+
+@media (max-width: 1024px) {
+  .dashboard-grid-two-col {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* AI Business Insights Strip (Stripe/Linear style) */
+.insights-banner-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--space-4);
+}
+
+.insight-card {
+  background: #ffffff;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: var(--space-3);
+  box-shadow: var(--shadow-xs);
+  transition: all var(--transition-fast);
+  position: relative;
+  overflow: hidden;
+}
+
+.insight-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+}
+
+.insight-card.insight-demand::before { background: #6366f1; }
+.insight-card.insight-risk::before { background: #d97706; }
+.insight-card.insight-margin::before { background: #059669; }
+.insight-card.insight-slow::before { background: #94a3b8; }
+
+.insight-card:hover {
+  transform: translateY(-1px);
+  border-color: var(--color-border-strong);
+  box-shadow: var(--shadow-sm);
+}
+
+.insight-top-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.insight-body-text {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  line-height: 1.4;
+}
+
+.insight-subtext {
+  font-size: 12px;
+  color: var(--color-text-secondary);
+  line-height: 1.4;
+}
+
+.insight-action-link {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-brand-accent);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+}
+
+.insight-action-link:hover {
+  text-decoration: underline;
+}
+
+/* Urgent Restock List inside Dashboard */
+.urgent-restock-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.restock-item-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 10px;
+  border-radius: var(--radius-md);
+  background-color: var(--color-canvas);
+  border: 1px solid var(--color-border-subtle);
+  font-size: 12.5px;
+}
+
+.restock-item-left {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.restock-item-name {
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.restock-item-sub {
+  font-size: 11px;
+  color: var(--color-text-muted);
+}
+
+/* --------------------------------------------------------------------------
+   TOOLBARS & FILTERS (Used across Products, Inventory, Sales, Customers)
+   -------------------------------------------------------------------------- */
+.filter-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: 10px 14px;
+  box-shadow: var(--shadow-xs);
+}
+
+.filter-group-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  flex: 1;
+}
+
+.filter-search-box {
+  position: relative;
+  min-width: 220px;
+  max-width: 320px;
+  flex: 1;
+}
+
+.filter-search-input {
+  width: 100%;
+  height: 32px;
+  background-color: var(--color-canvas);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 0 10px 0 30px;
+  font-size: 12.5px;
+  outline: none;
+}
+
+.filter-search-input:focus {
+  border-color: var(--color-brand-accent);
+  background-color: #ffffff;
+}
+
+.filter-select {
+  height: 32px;
+  background-color: var(--color-canvas);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 0 8px;
+  font-size: 12px;
+  color: var(--color-text-secondary);
+  outline: none;
+  cursor: pointer;
+}
+
+.filter-select:focus {
+  border-color: var(--color-brand-accent);
+  background-color: #ffffff;
+}
+
+/* --------------------------------------------------------------------------
+   CUSTOMER PROFILE DRAWER
+   -------------------------------------------------------------------------- */
+.customer-profile-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.customer-avatar-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.customer-big-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: #e2e8f0;
+  color: var(--color-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-family-display);
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.customer-meta-wrap {
+  display: flex;
+  flex-direction: column;
+}
+
+.customer-full-name {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--color-text-primary);
+}
+
+.customer-phone-sub {
+  font-size: 12px;
+  color: var(--color-text-muted);
+}
+
+.customer-stat-cards {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.cust-mini-stat {
+  background-color: var(--color-canvas);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.cust-stat-label {
+  font-size: 11px;
+  color: var(--color-text-muted);
+}
+
+.cust-stat-val {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--color-text-primary);
+}
+
+.ai-customer-insight-box {
+  background: var(--color-ai-surface);
+  border: 1px solid var(--color-ai-border);
+  border-radius: var(--radius-md);
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.ai-cust-badge {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--color-ai-indigo);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.ai-cust-text {
+  font-size: 12.5px;
+  color: var(--color-text-primary);
+  line-height: 1.4;
+}
+
+/* --------------------------------------------------------------------------
+   SUPPLIERS DIRECTORY
+   -------------------------------------------------------------------------- */
+.suppliers-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: var(--space-4);
+}
+
+.supplier-card {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  box-shadow: var(--shadow-xs);
+  transition: all var(--transition-fast);
+}
+
+.supplier-card:hover {
+  border-color: var(--color-border-strong);
+  box-shadow: var(--shadow-sm);
+}
+
+.supplier-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.supplier-name {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--color-text-primary);
+}
+
+.supplier-category {
+  font-size: 12px;
+  color: var(--color-text-muted);
+}
+
+.supplier-contact-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--color-text-secondary);
+}
+
+.supplier-stats-row {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+  background-color: var(--color-canvas);
+  border-radius: var(--radius-md);
+  padding: 8px 10px;
+  font-size: 12px;
+}
+
+/* --------------------------------------------------------------------------
+   REPORTS SECTION
+   -------------------------------------------------------------------------- */
+.report-paper {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+.report-header-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 2px solid var(--color-primary);
+  padding-bottom: var(--space-4);
+}
+
+.report-store-brand {
+  display: flex;
+  flex-direction: column;
+}
+
+.report-store-name {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+.report-meta-text {
+  font-size: 12px;
+  color: var(--color-text-muted);
+}
+
+.report-badge-box {
+  text-align: right;
+}
+
+.report-summary-box {
+  background-color: var(--color-canvas);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-4);
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: var(--color-text-secondary);
+}
+
+/* --------------------------------------------------------------------------
+   SETTINGS & ROLE-BASED ACCESS
+   -------------------------------------------------------------------------- */
+.settings-grid-layout {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: var(--space-6);
+}
+
+@media (max-width: 768px) {
+  .settings-grid-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.settings-nav-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.settings-tab-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: var(--radius-md);
+  color: var(--color-text-secondary);
+  background: transparent;
+  border: none;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  text-align: left;
+  transition: all var(--transition-fast);
+}
+
+.settings-tab-btn:hover {
+  background-color: var(--color-canvas-subtle);
+  color: var(--color-text-primary);
+}
+
+.settings-tab-btn.active {
+  background-color: var(--color-surface);
+  color: var(--color-primary);
+  font-weight: 600;
+  box-shadow: var(--shadow-xs);
+  border: 1px solid var(--color-border);
+}
+
+.settings-tab-pane {
+  display: none;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.settings-tab-pane.active {
+  display: flex;
+}
+
+.permission-matrix-table th, .permission-matrix-table td {
+  text-align: center;
+}
+
+.permission-matrix-table th:first-child, .permission-matrix-table td:first-child {
+  text-align: left;
+}
+
+.check-icon-active {
+  color: var(--color-success);
+  font-weight: 700;
+}
+
+.check-icon-inactive {
+  color: var(--color-text-subtle);
+}
