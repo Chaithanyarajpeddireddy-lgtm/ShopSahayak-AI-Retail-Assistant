@@ -55,10 +55,10 @@
 .segmented-btn {
   background: transparent;
   border: none;
-  font-size: 11px;
+  font-size: var(--font-size-xs);
   font-weight: 600;
   color: var(--color-text-secondary);
-  padding: 3px 8px;
+  padding: 4px 10px;
   border-radius: var(--radius-sm);
   cursor: pointer;
   transition: all var(--transition-fast);
@@ -102,7 +102,7 @@
 
 .chart-axis-label {
   font-family: var(--font-family-sans);
-  font-size: 10.5px;
+  font-size: var(--font-size-xs);
   fill: var(--color-text-muted);
   user-select: none;
 }
@@ -147,9 +147,9 @@
   position: absolute;
   background-color: var(--color-primary);
   color: #ffffff;
-  padding: 6px 10px;
+  padding: 6px 12px;
   border-radius: var(--radius-sm);
-  font-size: 11px;
+  font-size: var(--font-size-xs);
   pointer-events: none;
   box-shadow: var(--shadow-md);
   transform: translate(-50%, -120%);
@@ -159,14 +159,14 @@
 }
 
 .chart-tooltip-title {
-  color: #94a3b8;
-  font-size: 10px;
+  color: #cbd5e1;
+  font-size: var(--font-size-xs);
   margin-bottom: 2px;
 }
 
 .chart-tooltip-val {
   font-weight: 700;
-  font-size: 12px;
+  font-size: var(--font-size-sm);
 }
 
 /* --------------------------------------------------------------------------
@@ -216,7 +216,7 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  font-size: 12px;
+  font-size: var(--font-size-xs);
   color: var(--color-text-secondary);
 }
 

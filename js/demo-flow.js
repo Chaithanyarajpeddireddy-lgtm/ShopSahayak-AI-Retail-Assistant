@@ -18,6 +18,9 @@ class HackathonDemoFlow {
         title: "Owner Session Active",
         desc: "Ravi Sharma (Owner) logs in to Sharma Kirana Store SaaS operating system.",
         action: () => {
+          if (window.ShopAuth && !window.ShopAuth.hasActiveSession()) {
+            window.ShopAuth.completeLogin("demo_flow");
+          }
           this.store.setRole("owner");
           this.ui.switchView("overview");
         }
@@ -146,8 +149,10 @@ class HackathonDemoFlow {
     const stepObj = this.steps[this.currentStep - 1];
     const badge = document.getElementById("demoStepBadge");
     const text = document.getElementById("demoStepText");
+    const dict = (typeof TRANSLATIONS !== "undefined" && TRANSLATIONS[this.store.currentLanguage]) ? TRANSLATIONS[this.store.currentLanguage] : null;
+    const prefix = dict && dict.demoStepPrefix ? dict.demoStepPrefix : "Step";
 
-    if (badge) badge.innerText = `Step ${this.currentStep}/${this.totalSteps}`;
+    if (badge) badge.innerText = `${prefix} ${this.currentStep}/${this.totalSteps}`;
     if (text) {
       text.innerHTML = `<strong>${stepObj.title}:</strong> ${stepObj.desc}`;
     }
@@ -172,6 +177,9 @@ class HackathonDemoFlow {
   }
 
   async toggleAutoPlay() {
+    if (window.ShopAuth && !window.ShopAuth.hasActiveSession()) {
+      window.ShopAuth.completeLogin("demo_flow");
+    }
     this.isPlaying = !this.isPlaying;
     const btn = document.getElementById("demoAutoBtn");
     if (btn) btn.innerText = this.isPlaying ? "Pause Demo" : "Auto Play Demo";

@@ -69,7 +69,7 @@
 
 .ai-header-title {
   font-family: var(--font-family-display);
-  font-size: 14px;
+  font-size: var(--font-size-base);
   font-weight: 700;
   color: var(--color-text-primary);
   display: flex;
@@ -81,7 +81,7 @@
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  font-size: 11px;
+  font-size: var(--font-size-xs);
   color: var(--color-success-dark);
   font-weight: 500;
 }
@@ -130,7 +130,7 @@
 .chat-bubble {
   padding: 12px 16px;
   border-radius: var(--radius-lg);
-  font-size: 13.5px;
+  font-size: var(--font-size-base);
   line-height: 1.5;
 }
 
@@ -152,11 +152,11 @@
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  font-size: 11px;
+  font-size: var(--font-size-xs);
   font-weight: 500;
   color: var(--color-ai-indigo);
   background-color: var(--color-ai-surface);
-  padding: 2px 8px;
+  padding: 3px 9px;
   border-radius: var(--radius-pill);
   border: 1px solid var(--color-ai-border);
   align-self: flex-end;
@@ -183,10 +183,10 @@
 }
 
 .agentic-box-title {
-  font-size: 11px;
+  font-size: var(--font-size-xs);
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.02em;
   color: var(--color-ai-indigo);
   display: flex;
   align-items: center;
@@ -203,20 +203,20 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: 12px;
+  font-size: var(--font-size-xs);
   color: var(--color-text-secondary);
 }
 
 .agentic-step-icon {
-  width: 16px;
-  height: 16px;
+  width: 18px;
+  height: 18px;
   border-radius: 50%;
   background-color: var(--color-success-surface);
   color: var(--color-success-dark);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 10px;
+  font-size: var(--font-size-xs);
   font-weight: 700;
   flex-shrink: 0;
 }
@@ -240,7 +240,7 @@
   border-radius: var(--radius-md);
   margin-top: 8px;
   overflow: hidden;
-  font-size: 12px;
+  font-size: var(--font-size-xs);
 }
 
 .calculation-summary {
@@ -273,8 +273,8 @@
   justify-content: space-between;
   align-items: center;
   font-family: var(--font-family-mono);
-  font-size: 11.5px;
-  padding: 3px 0;
+  font-size: var(--font-size-xs);
+  padding: 4px 0;
   border-bottom: 1px dashed var(--color-border);
 }
 
@@ -291,12 +291,12 @@
   background: #ffffff;
   border: 1px solid #c7d2fe;
   border-radius: var(--radius-lg);
-  padding: 14px;
+  padding: 16px;
   margin-top: 10px;
   box-shadow: 0 4px 12px rgba(99, 102, 241, 0.08);
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
 }
 
 .ai-action-badge-row {
@@ -306,7 +306,7 @@
 }
 
 .ai-action-title {
-  font-size: 13.5px;
+  font-size: var(--font-size-base);
   font-weight: 700;
   color: var(--color-text-primary);
 }
@@ -316,14 +316,14 @@
   grid-template-columns: repeat(2, 1fr);
   gap: 8px;
   background: var(--color-canvas);
-  padding: 8px 10px;
+  padding: 10px 12px;
   border-radius: var(--radius-md);
-  font-size: 12px;
+  font-size: var(--font-size-xs);
 }
 
 .ai-action-metric-label {
   color: var(--color-text-muted);
-  font-size: 11px;
+  font-size: var(--font-size-xs);
 }
 
 .ai-action-metric-val {
@@ -362,8 +362,8 @@
   background-color: var(--color-canvas);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-pill);
-  padding: 4px 10px;
-  font-size: 11.5px;
+  padding: 5px 12px;
+  font-size: var(--font-size-xs);
   font-weight: 500;
   color: var(--color-text-secondary);
   cursor: pointer;
@@ -386,12 +386,12 @@
 
 .ai-input-field {
   flex: 1;
-  height: 40px;
+  height: 42px;
   background-color: var(--color-canvas);
   border: 1px solid var(--color-border-strong);
   border-radius: var(--radius-lg);
   padding: 0 44px 0 14px;
-  font-size: 13.5px;
+  font-size: var(--font-size-base);
   color: var(--color-text-primary);
   outline: none;
   transition: all var(--transition-fast);
@@ -406,8 +406,8 @@
 .ai-send-btn {
   position: absolute;
   right: 6px;
-  width: 30px;
-  height: 30px;
+  width: 32px;
+  height: 32px;
   border-radius: var(--radius-md);
   background-color: var(--color-primary);
   color: #ffffff;
@@ -451,7 +451,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  font-size: 12px;
+  font-size: var(--font-size-xs);
   font-weight: 600;
   color: var(--color-text-secondary);
 }
@@ -511,7 +511,7 @@
   margin-top: 12px;
   text-align: center;
   max-width: 260px;
-  font-size: 12px;
+  font-size: var(--font-size-xs);
   color: var(--color-text-secondary);
   font-style: italic;
   min-height: 36px;
@@ -538,24 +538,24 @@
   display: inline-flex;
   align-items: center;
   gap: 5px;
-  font-size: 10px;
+  font-size: var(--font-size-xs);
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.02em;
   color: #4338ca;
   background-color: #e0e7ff;
-  padding: 2px 8px;
+  padding: 3px 9px;
   border-radius: var(--radius-pill);
 }
 
 .voice-status-title {
-  font-size: 14px;
+  font-size: var(--font-size-base);
   font-weight: 700;
   color: var(--color-text-primary);
 }
 
 .voice-status-subtitle {
-  font-size: 12px;
+  font-size: var(--font-size-xs);
   color: var(--color-text-muted);
 }
 
@@ -648,15 +648,15 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
-  font-size: 12px;
+  font-size: var(--font-size-xs);
 }
 
 .telemetry-header {
   font-weight: 700;
   color: var(--color-text-secondary);
-  font-size: 11px;
+  font-size: var(--font-size-xs);
   text-transform: uppercase;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.02em;
   display: flex;
   align-items: center;
   justify-content: space-between;
