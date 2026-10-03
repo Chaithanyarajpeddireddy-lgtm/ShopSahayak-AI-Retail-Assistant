@@ -75,18 +75,18 @@ Below is the verified automated end-to-end browser execution recording demonstra
 The web application includes an interactive walkthrough banner at the top of the interface that allows judges and evaluators to step through or auto-play the complete 13-step hackathon demo flow:
 
 1. **Owner Session Active:** Ravi Sharma (Owner) logs in to Sharma Kirana Store.
-2. **Dashboard Overview:** Displays revenue (₹18,450), orders (47), estimated profit (₹6,240), and low stock count.
-3. **AI Business Insight Triggers:** Detects *"6 products below minimum level. Rice demand increased +21%"*.
+2. **Dashboard Overview:** Displays revenue (₹18,450), orders (47), estimated profit (₹2,723 • 14.8%), and low stock (7).
+3. **AI Business Insight Triggers:** Detects *"7 products below minimum level. Rice demand increased +21%"*.
 4. **Owner Opens AI Assistant:** Launches dedicated ShopSahayak AI Command Center.
 5. **Owner Speaks via LiveKit Voice:** Natural query: *"Anna, rice stock entha undi?"*.
 6. **LiveKit Real-time Stream:** Voice waveform activates, language detected as *"Telugu + English"*.
 7. **AI Assistant Responds:** *"You currently have 18 kg of rice in stock. Current stock may run low in 48 hours."*
 8. **Agentic Tool Execution Timeline:** Displays live checklist (Checking inventory, analyzing 30-day velocity, calculating demand).
-9. **Restocking Recommendation Generated:** AI recommends ordering 100 kg from ABC Distributors for ₹8,400.
-10. **Owner Approves Purchase Order:** Clicks "Approve & Create Purchase Order" with security verification.
+9. **Restocking Recommendation Generated:** AI recommends ordering 100 kg from ABC Distributors for ₹5,400.
+10. **Owner Approves Purchase Order:** Approves purchase order with 2-step security confirmation dialog.
 11. **Purchase Order Confirmed:** PO-8831 generated and sent to ABC Distributors.
 12. **Live Store Inventory Updates:** Sona Masoori Rice stock automatically increases from 18 kg to 118 kg!
-13. **Updated Business Insights:** Low stock alert count updates and updated store report is compiled.
+13. **Updated Business Insights:** Low stock alert count drops from 7 to 6 and updated store report is compiled.
 
 ---
 

@@ -20,14 +20,14 @@ const INITIAL_STORE_PROFILE = {
 const INITIAL_PRODUCTS = [
   {
     id: "PROD-001",
-    name: "Sona Masoori Raw Rice (25kg Bag)",
-    sku: "RIC-SONA-25K",
+    name: "Sona Masoori Raw Rice",
+    sku: "RIC-SONA-1K",
     category: "Grains & Rice",
-    purchasePrice: 1250,
-    sellingPrice: 1350,
+    purchasePrice: 54,
+    sellingPrice: 62,
     stock: 18,
     minStock: 30,
-    unit: "bags",
+    unit: "kg",
     supplierId: "SUP-001",
     supplierName: "ABC Distributors",
     velocityDaily: 9.3, // ~65 kg/week
@@ -109,7 +109,7 @@ const INITIAL_PRODUCTS = [
     minStock: 50,
     unit: "packs",
     supplierId: "SUP-005",
-    supplierName: "Nestlé Local Agency",
+    supplierName: "Nestlé & Britannia Agency",
     velocityDaily: 18.0,
     status: "out",
     trend: "Stockout alert"
@@ -205,7 +205,7 @@ const INITIAL_PRODUCTS = [
     minStock: 25,
     unit: "packs",
     supplierId: "SUP-005",
-    supplierName: "Britannia & Parle Depot",
+    supplierName: "Nestlé & Britannia Agency",
     velocityDaily: 7.2,
     status: "healthy",
     trend: "Consistent"
@@ -260,6 +260,12 @@ const INITIAL_PRODUCTS = [
   }
 ];
 
+function getDaysAgoDate(daysAgo) {
+  const d = new Date();
+  d.setDate(d.getDate() - daysAgo);
+  return d.toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
+}
+
 const INITIAL_SUPPLIERS = [
   {
     id: "SUP-001",
@@ -270,7 +276,7 @@ const INITIAL_SUPPLIERS = [
     email: "orders@abcdistributors.in",
     pendingOrders: 0,
     totalPurchased: 248000,
-    lastOrderDate: "18 Oct 2024",
+    lastOrderDate: getDaysAgoDate(5),
     status: "Active"
   },
   {
@@ -282,7 +288,7 @@ const INITIAL_SUPPLIERS = [
     email: "balaji.traders.hyd@gmail.com",
     pendingOrders: 1,
     totalPurchased: 194500,
-    lastOrderDate: "21 Oct 2024",
+    lastOrderDate: getDaysAgoDate(2),
     status: "Active"
   },
   {
@@ -294,7 +300,7 @@ const INITIAL_SUPPLIERS = [
     email: "srilakshmi.pulses@rediffmail.com",
     pendingOrders: 0,
     totalPurchased: 162000,
-    lastOrderDate: "15 Oct 2024",
+    lastOrderDate: getDaysAgoDate(8),
     status: "Active"
   },
   {
@@ -306,7 +312,7 @@ const INITIAL_SUPPLIERS = [
     email: "secunderabad.amul@coop.org",
     pendingOrders: 0,
     totalPurchased: 98000,
-    lastOrderDate: "23 Oct 2024",
+    lastOrderDate: getDaysAgoDate(1),
     status: "Active"
   },
   {
@@ -318,7 +324,7 @@ const INITIAL_SUPPLIERS = [
     email: "hyd.agencies@fmcgdist.com",
     pendingOrders: 0,
     totalPurchased: 112000,
-    lastOrderDate: "19 Oct 2024",
+    lastOrderDate: getDaysAgoDate(4),
     status: "Active"
   },
   {
@@ -330,7 +336,7 @@ const INITIAL_SUPPLIERS = [
     email: "joshi.distributors@hul.in",
     pendingOrders: 0,
     totalPurchased: 135000,
-    lastOrderDate: "16 Oct 2024",
+    lastOrderDate: getDaysAgoDate(7),
     status: "Active"
   }
 ];
@@ -416,8 +422,8 @@ const INITIAL_TRANSACTIONS = [
     time: "Today, 11:45 AM",
     customer: "Mohammed Irfan (Biryani Point)",
     itemsCount: 4,
-    itemsSummary: "Sona Masoori Rice (25kg x 2), Garam Masala (x 4)",
-    amount: 3076,
+    itemsSummary: "Sona Masoori Rice 45kg, Garam Masala (x 4)",
+    amount: 3166,
     paymentMethod: "Khata / Ledger",
     status: "Completed"
   },
@@ -489,7 +495,7 @@ const INITIAL_NOTIFICATIONS = [
     category: "Inventory",
     severity: "urgent",
     title: "Rice stock critical",
-    message: "Sona Masoori Rice is at 18 kg (Safety threshold: 30 kg). Stockout risk in 2 days.",
+    message: "Sona Masoori Rice is at 18 kg (Safety threshold: 30 kg). Stockout risk in 48 hours.",
     time: "10 mins ago",
     read: false,
     action: "open_ai_restock",

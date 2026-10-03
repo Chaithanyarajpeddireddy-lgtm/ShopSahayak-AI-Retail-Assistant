@@ -72,6 +72,10 @@ class ShopCameraManager {
     this.stopCamera();
     this.lastErrorCode = null;
 
+    // Increment request token for race cancellation
+    this.startToken = (this.startToken || 0) + 1;
+    const currentToken = this.startToken;
+
     if (!videoEl) {
       const err = { success: false, error: "GENERIC_ERROR", message: this.getLocalizedMessage("GENERIC_ERROR") };
       return err;
@@ -114,6 +118,16 @@ class ShopCameraManager {
         }
       }
 
+      // If camera was stopped or cancelled while waiting for getUserMedia, stop tracks immediately!
+      if (this.startToken !== currentToken) {
+        if (stream) {
+          try {
+            stream.getTracks().forEach(t => t.stop());
+          } catch (e) {}
+        }
+        return { success: false, error: "CANCELLED", message: "Camera initialization was cancelled." };
+      }
+
       this.activeStream = stream;
       this.activeVideoEl = videoEl;
 
@@ -130,8 +144,17 @@ class ShopCameraManager {
         await videoEl.play();
       }
 
+      // Check again if cancelled during video play
+      if (this.startToken !== currentToken) {
+        this.stopCamera(videoEl);
+        return { success: false, error: "CANCELLED", message: "Camera initialization was cancelled." };
+      }
+
       return { success: true, stream: stream };
     } catch (err) {
+      if (this.startToken !== currentToken) {
+        return { success: false, error: "CANCELLED", message: "Camera initialization was cancelled." };
+      }
       const errCode = this._mapDomException(err);
       this.lastErrorCode = errCode;
       const errResult = {
@@ -152,6 +175,8 @@ class ShopCameraManager {
    * @param {HTMLVideoElement} [videoEl] - Optional specific video element to detach
    */
   stopCamera(videoEl) {
+    // Invalidate any pending startCamera call
+    this.startToken = (this.startToken || 0) + 1;
     const el = videoEl || this.activeVideoEl;
 
     if (this.activeStream) {
@@ -284,21 +309,25 @@ class ShopCameraManager {
     const retryText = dict.cameraRetryBtn || "Retry Camera";
 
     containerEl.innerHTML = `
-      <div class="camera-error-banner" role="alert" style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px 16px; background: rgba(239, 68, 68, 0.08); border: 1px solid rgba(239, 68, 68, 0.25); border-radius: 12px; text-align: center; gap: 12px; max-width: 440px; margin: 0 auto;">
-        <div style="width: 44px; height: 44px; border-radius: 50%; background: rgba(239, 68, 68, 0.15); display: flex; align-items: center; justify-content: center; color: #dc2626; font-size: 20px; font-weight: 700;">
-          ⚠
+      <div class="camera-error-banner" role="alert">
+        <div class="camera-error-icon-box">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/>
+            <line x1="12" y1="9" x2="12" y2="13"/>
+            <line x1="12" y1="17" x2="12.01" y2="17"/>
+          </svg>
         </div>
-        <p style="margin: 0; font-size: 13px; line-height: 1.5; color: var(--color-text-primary, #1e293b); font-weight: 500;">
+        <p class="camera-error-text">
           ${message}
         </p>
-        <div style="display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-top: 4px;">
+        <div class="camera-error-actions">
           ${options.onRetry ? `
-            <button type="button" class="btn btn-secondary btn-sm camera-retry-btn" style="min-height: 34px; font-size: 12px;">
+            <button type="button" class="btn btn-secondary btn-sm camera-retry-btn">
               ↺ ${retryText}
             </button>
           ` : ""}
           ${options.onFallback ? `
-            <button type="button" class="btn btn-primary btn-sm camera-fallback-btn" style="min-height: 34px; font-size: 12px;">
+            <button type="button" class="btn btn-primary btn-sm camera-fallback-btn">
               → ${fallbackText}
             </button>
           ` : ""}

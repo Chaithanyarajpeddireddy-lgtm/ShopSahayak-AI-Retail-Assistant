@@ -161,6 +161,7 @@ class ShopAuthManager {
    */
   goToStep(step) {
     this.currentStep = step;
+    this.verificationToken = (this.verificationToken || 0) + 1;
     const step1Sec = document.getElementById("loginStep1Section");
     const step2Sec = document.getElementById("loginStep2Section");
     const step1Badge = document.getElementById("loginStepBadge1");
@@ -273,6 +274,8 @@ class ShopAuthManager {
     this._stopDetection();
     this.steadyStartMs = null;
     this.scanStartMs = Date.now();
+    this.verificationToken = (this.verificationToken || 0) + 1;
+    const currentToken = this.verificationToken;
 
     const videoEl = document.getElementById("loginFaceVideo");
     const containerEl = document.getElementById("faceViewfinder");
@@ -302,6 +305,12 @@ class ShopAuthManager {
       video: { facingMode: "user", width: { ideal: 640 }, height: { ideal: 640 } }
     });
 
+    // Check if step changed or verification was cancelled during camera start
+    if (this.verificationToken !== currentToken || this.currentStep !== 2) {
+      window.ShopCamera.stopCamera();
+      return;
+    }
+
     if (!cameraResult.success) {
       if (errContainer) {
         window.ShopCamera.renderError(errContainer, cameraResult, {
@@ -315,6 +324,11 @@ class ShopAuthManager {
 
     // 2. Lazily load MediaPipe Tasks Vision if not ready
     await this._ensureMediaPipeLoaded();
+
+    if (this.verificationToken !== currentToken || this.currentStep !== 2) {
+      window.ShopCamera.stopCamera();
+      return;
+    }
 
     if (this.faceDetectorFailed || !this.faceDetector) {
       // Offline or CDN blocked fallback
@@ -350,16 +364,35 @@ class ShopAuthManager {
         "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/wasm"
       );
 
-      this.faceDetector = await FaceDetector.createFromOptions(vision, {
-        baseOptions: {
-          modelAssetPath: "https://storage.googleapis.com/mediapipe-models/face_detector/blaze_face_short_range/float16/1/blaze_face_short_range.tflite",
-          delegate: "GPU"
-        },
-        runningMode: "IMAGE"
-      });
-      this.faceDetectorFailed = false;
+      // Try GPU delegate first
+      try {
+        this.faceDetector = await FaceDetector.createFromOptions(vision, {
+          baseOptions: {
+            modelAssetPath: "https://storage.googleapis.com/mediapipe-models/face_detector/blaze_face_short_range/float16/1/blaze_face_short_range.tflite",
+            delegate: "GPU"
+          },
+          runningMode: "IMAGE"
+        });
+        this.faceDetectorFailed = false;
+      } catch (gpuErr) {
+        console.warn("MediaPipe GPU delegate initialization failed, falling back to CPU delegate...", gpuErr);
+        // Automatic retry with CPU delegate
+        try {
+          this.faceDetector = await FaceDetector.createFromOptions(vision, {
+            baseOptions: {
+              modelAssetPath: "https://storage.googleapis.com/mediapipe-models/face_detector/blaze_face_short_range/float16/1/blaze_face_short_range.tflite",
+              delegate: "CPU"
+            },
+            runningMode: "IMAGE"
+          });
+          this.faceDetectorFailed = false;
+        } catch (cpuErr) {
+          console.error("MediaPipe CPU delegate initialization also failed:", cpuErr);
+          throw cpuErr;
+        }
+      }
     } catch (err) {
-      // Pinned CDN failed or network is offline: graceful fallback without app breaking
+      // Both GPU and CPU or network offline: graceful fallback without breaking app
       this.faceDetectorFailed = true;
       this.faceDetector = null;
       if (statusTextEl) {
@@ -531,7 +564,7 @@ class ShopAuthManager {
     const dict = (typeof TRANSLATIONS !== "undefined" && TRANSLATIONS[lang]) ? TRANSLATIONS[lang] : {};
 
     if (window.shopUI && typeof window.shopUI.showToast === "function") {
-      window.shopUI.showToast(dict.logoutBtn ? `${dict.logoutBtn} successful` : "Logged out successfully", "info");
+      window.shopUI.showToast(dict.logoutSuccess || "Logged out successfully.", "info");
     }
 
     this.showLogin(1);

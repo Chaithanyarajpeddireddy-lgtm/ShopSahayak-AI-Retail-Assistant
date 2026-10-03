@@ -17,11 +17,13 @@ class ShopSahayakAIEngine {
   }
 
   initWelcomeMessage() {
+    const stockCounts = this.store ? this.store.recalculateStockCounts() : { low: 7 };
+    const lowCount = stockCounts.low;
     this.chatHistory = [
       {
         id: "msg-welcome",
         sender: "ai",
-        text: "Namaste Ravi garu! Good morning. I'm your ShopSahayak business operating assistant. Sharma Kirana Store currently has 6 items below safety stock, and rice demand is up by +21%. You can ask me anything about your inventory, sales, or supplier reorders in English, Telugu, or Hindi.",
+        text: `Namaste Ravi garu! Good morning. I'm your ShopSahayak business operating assistant. Sharma Kirana Store currently has ${lowCount} items below safety stock, and rice demand is up by +21%. You can ask me anything about your inventory, sales, or supplier reorders in English, Telugu, or Hindi.`,
         detectedLang: "English",
         tools: null,
         calculation: null,
@@ -30,21 +32,43 @@ class ShopSahayakAIEngine {
     ];
   }
 
-  detectLanguage(query) {
-    const teluguWords = ["anna", "entha", "undi", "babu", "choodu", "ivvandi", "cheppandi", "ledu", "evaru", "kavali"];
-    const hindiWords = ["aaj", "kitna", "hai", "batao", "bhejo", "kaisa", "daal", "chawal", "khata", "dukan", "karein"];
-    
-    const lower = query.toLowerCase();
-    const hasTelugu = teluguWords.some(w => lower.includes(w)) || /[\u0C00-\u0C7F]/.test(query);
-    const hasHindi = hindiWords.some(w => lower.includes(w)) || /[\u0900-\u097F]/.test(query);
+  tokenize(text) {
+    if (!text) return [];
+    // Match letter/number/combining mark sequences across Unicode scripts (including Indic matras/viramas)
+    const matches = text.toLowerCase().match(/[\p{L}\p{N}\p{M}]+/gu);
+    return matches || [];
+  }
 
-    if (hasTelugu && /[a-zA-Z]/.test(query)) {
+  detectLanguage(query) {
+    if (!query) return "English";
+
+    const hasTeluguScript = /[\u0C00-\u0C7F]/.test(query);
+    const hasHindiScript = /[\u0900-\u097F]/.test(query);
+    const hasLatinScript = /[a-zA-Z]/.test(query);
+
+    const tokens = this.tokenize(query);
+
+    // Whitelist of specific Latin-transliterated words (matched strictly as whole tokens)
+    const teluguLatinWords = new Set([
+      "anna", "entha", "undi", "babu", "choodu", "ivvandi", "cheppandi", "ledu", "evaru", "kavali", "namaskaram"
+    ]);
+    const hindiLatinWords = new Set([
+      "aaj", "kitna", "batao", "bhejo", "kaisa", "daal", "chawal", "dukan", "karein", "pucho", "namaste"
+    ]);
+
+    const hasTeluguLatin = tokens.some(t => teluguLatinWords.has(t));
+    const hasHindiLatin = tokens.some(t => hindiLatinWords.has(t));
+
+    const isTelugu = hasTeluguScript || hasTeluguLatin;
+    const isHindi = hasHindiScript || hasHindiLatin;
+
+    if (isTelugu && hasLatinScript) {
       return "Telugu + English";
-    } else if (hasTelugu) {
+    } else if (isTelugu) {
       return "Telugu (తెలుగు)";
-    } else if (hasHindi && /[a-zA-Z]/.test(query)) {
+    } else if (isHindi && hasLatinScript) {
       return "Hindi + English (Hinglish)";
-    } else if (hasHindi) {
+    } else if (isHindi) {
       return "Hindi (हिंदी)";
     }
     return "English";
@@ -67,20 +91,55 @@ class ShopSahayakAIEngine {
     // Show AI typing / thinking indicator
     if (this.onStateChange) this.onStateChange("ai_thinking", true);
 
-    // Simulate Agentic tool workflow
+    const tokens = this.tokenize(queryText);
+    const tokenSet = new Set(tokens);
     const queryLower = queryText.toLowerCase();
 
-    // MAIN HACKATHON DEMO FLOW: Rice stock query (Telugu/English code-mix)
-    if (queryLower.includes("rice") || queryLower.includes("బియ్యం") || queryLower.includes("chawal")) {
+    // Check for Rice intent (whole tokens or script)
+    const isRice = tokenSet.has("rice") ||
+      tokenSet.has("chawal") ||
+      tokens.some(t => t.includes("బియ్యం") || t.includes("చావల్") || t.includes("चावल"));
+
+    // Check for Oil intent (whole tokens only: 'tel' as a single token, never substring of 'tell')
+    const isOil = tokenSet.has("oil") ||
+      tokenSet.has("sunflower") ||
+      tokenSet.has("fortune") ||
+      tokenSet.has("tel") ||
+      tokens.some(t => t.includes("నూనె") || t.includes("తైలం") || t.includes("तेल"));
+
+    // Check for Khata / customer credit intent
+    const isKhata = tokenSet.has("khata") ||
+      tokenSet.has("udhar") ||
+      tokenSet.has("khatabook") ||
+      tokenSet.has("credit") ||
+      tokenSet.has("balance") ||
+      tokens.some(t => t.includes("ఖాతా") || t.includes("ఉధార్") || t.includes("खाता") || t.includes("उधार"));
+
+    // Check for Low Stock summary intent
+    const isLowStock = queryLower.includes("low stock") ||
+      (tokenSet.has("low") && tokenSet.has("stock")) ||
+      tokenSet.has("reorder") ||
+      tokens.some(t => t.includes("తక్కువ") || t.includes("కొరత") || t.includes("कम") || t.includes("कमी"));
+
+    // Check for Sales / Reports intent
+    const isSales = tokenSet.has("report") ||
+      tokenSet.has("reports") ||
+      tokenSet.has("sales") ||
+      tokenSet.has("revenue") ||
+      tokenSet.has("profit") ||
+      tokens.some(t => t.includes("రిపోర్ట్") || t.includes("అమ్మకాలు") || t.includes("बिक्री") || t.includes("रिपोर्ट"));
+
+    // Route based on token intent
+    if (isRice) {
       await this.executeRiceStockAgenticWorkflow(detectedLang, isVoice);
-    } else if (queryLower.includes("oil") || queryLower.includes("నూనె") || queryLower.includes("tel")) {
+    } else if (isOil) {
       await this.executeOilAgenticWorkflow(detectedLang, isVoice);
-    } else if (queryLower.includes("low stock") || queryLower.includes("తక్కువ") || queryLower.includes("कम")) {
-      await this.executeLowStockSummaryWorkflow(detectedLang, isVoice);
-    } else if (queryLower.includes("report") || queryLower.includes("రిపోర్ట్") || queryLower.includes("sales")) {
-      await this.executeSalesAnalysisWorkflow(detectedLang, isVoice);
-    } else if (queryLower.includes("khata") || queryLower.includes("customer") || queryLower.includes("ఉధార్")) {
+    } else if (isKhata) {
       await this.executeKhataAnalysisWorkflow(detectedLang, isVoice);
+    } else if (isLowStock) {
+      await this.executeLowStockSummaryWorkflow(detectedLang, isVoice);
+    } else if (isSales) {
+      await this.executeSalesAnalysisWorkflow(detectedLang, isVoice);
     } else {
       await this.executeGeneralRetailWorkflow(queryText, detectedLang, isVoice);
     }
@@ -92,10 +151,17 @@ class ShopSahayakAIEngine {
   async executeRiceStockAgenticWorkflow(detectedLang, isVoice) {
     const riceProd = this.store.products.find(p => p.id === "PROD-001");
     const stockQty = riceProd ? riceProd.stock : 18;
+    const velocityDaily = riceProd ? riceProd.velocityDaily : 9.3;
+    const buyPrice = riceProd ? riceProd.purchasePrice : 54;
+    const reorderQty = 100;
+    const totalCost = reorderQty * buyPrice; // 100 * 54 = 5,400
 
-    // Step 1: Agentic activity timeline
+    const daysRemaining = (stockQty / velocityDaily).toFixed(1); // 1.9 days
+    const hoursRemaining = Math.round((stockQty / velocityDaily) * 24); // ~48 hours
+
+    // Agentic activity timeline
     const tools = [
-      { name: "Checking inventory for 'Sona Masoori Rice'...", status: "active", icon: "search" },
+      { name: "Checking inventory for 'Sona Masoori Raw Rice'...", status: "active", icon: "search" },
       { name: "Analyzing 30-day sales velocity...", status: "pending", icon: "chart" },
       { name: "Calculating restocking demand model...", status: "pending", icon: "calculator" },
       { name: "Fetching supplier quotes from ABC Distributors...", status: "pending", icon: "truck" }
@@ -105,26 +171,28 @@ class ShopSahayakAIEngine {
     const aiMessage = {
       id: aiMsgId,
       sender: "ai",
-      text: `You currently have ${stockQty} kg of Sona Masoori Raw Rice in stock. Your average weekly rice sales are 65 kg (approx 9.3 kg/day). Based on recent festive demand, your current stock may run low within 48 hours.`,
+      text: `You currently have ${stockQty} kg of Sona Masoori Raw Rice in stock. Your average weekly rice sales are 65 kg (approx ${velocityDaily} kg/day). Based on recent festive demand, your current stock may run low within 48 hours.`,
       detectedLang: detectedLang,
       tools: tools,
       calculation: {
         currentStock: `${stockQty} kg`,
         weeklyVelocity: "65 kg / week (9.3 kg / day)",
         safetyThreshold: "30 kg",
-        daysRemaining: `${Math.round(stockQty / 9.3)} days`,
-        recommendedOrder: "100 kg (4 bags of 25kg)",
+        daysRemaining: `${daysRemaining} days (~${hoursRemaining} hours)`,
+        recommendedOrder: `${reorderQty} kg`,
         supplierName: "ABC Distributors (Mahesh Agarwal)",
-        estimatedCost: "₹8,400 (@ ₹84/kg wholesale bulk rate)"
+        estimatedCost: `₹${totalCost.toLocaleString('en-IN')} (@ ₹${buyPrice}/kg wholesale bulk rate)`
       },
       actionCard: {
         id: "action-po-rice",
         title: "Recommended Replenishment Order",
-        product: "Sona Masoori Raw Rice (25kg Bags)",
-        quantity: 100,
+        product: "Sona Masoori Raw Rice",
+        productId: "PROD-001",
+        quantity: reorderQty,
         unit: "kg",
+        unitPrice: buyPrice,
         supplier: "ABC Distributors",
-        estimatedCost: 8400,
+        estimatedCost: totalCost,
         status: "pending_approval"
       }
     };
@@ -148,13 +216,13 @@ class ShopSahayakAIEngine {
 
     await this.delay(400);
     tools[2].status = "completed";
-    tools[2].name = "✓ Recommendation generated: Order 100 kg to prevent weekend stockout";
+    tools[2].name = `✓ Recommendation generated: Order ${reorderQty} kg to prevent weekend stockout`;
     tools[3].status = "completed";
-    tools[3].name = "✓ Supplier verified: ABC Distributors (₹8,400, Net 7 Days)";
+    tools[3].name = `✓ Supplier verified: ABC Distributors (₹${totalCost.toLocaleString('en-IN')}, Net 7 Days)`;
     if (this.onStateChange) this.onStateChange("message_updated", { messageId: aiMsgId });
 
     // Voice response if voice mode
-    const spokenText = `You currently have ${stockQty} kg of Sona Masoori Rice. At your weekly sales rate of 65 kg, your stock will run out in two days. I recommend ordering 100 kg from ABC Distributors.`;
+    const spokenText = `You currently have ${stockQty} kg of Sona Masoori Rice. At your weekly sales rate of 65 kg, your stock will run out in two days. I recommend ordering ${reorderQty} kg from ABC Distributors for ₹${totalCost.toLocaleString('en-IN')}.`;
     this.speakText(spokenText);
   }
 
@@ -185,8 +253,10 @@ class ShopSahayakAIEngine {
         id: "action-po-oil",
         title: "Reorder Fortune Sunflower Oil",
         product: "Fortune Sunlite Sunflower Oil (1L)",
+        productId: "PROD-003",
         quantity: 25,
         unit: "pouches",
+        unitPrice: 128,
         supplier: "Balaji Trading Co",
         estimatedCost: 3200,
         status: "pending_approval"
@@ -203,18 +273,22 @@ class ShopSahayakAIEngine {
   // LOW STOCK AUDIT WORKFLOW
   // ------------------------------------------------------------------------
   async executeLowStockSummaryWorkflow(detectedLang, isVoice) {
-    const lowStockItems = this.store.products.filter(p => p.status === "low" || p.status === "out");
+    const stockCounts = this.store.recalculateStockCounts();
+    const lowStockItems = this.store.products.filter(p => p.status === "low");
+    const outStockItems = this.store.products.filter(p => p.status === "out");
+
     const summary = lowStockItems.map(p => `• ${p.name}: ${p.stock} ${p.unit} remaining (Min: ${p.minStock})`).join("\n");
+    const outSummary = outStockItems.map(p => `• ${p.name}: OUT OF STOCK (0 ${p.unit})`).join("\n");
 
     const aiMsgId = "msg-ai-" + Date.now();
     this.chatHistory.push({
       id: aiMsgId,
       sender: "ai",
-      text: `There are currently ${lowStockItems.length} items that need your immediate restocking attention:\n\n${summary}\n\nWould you like me to draft batch purchase orders for your primary suppliers?`,
+      text: `There are currently ${stockCounts.low} low-stock items and ${stockCounts.out} out-of-stock item needing attention:\n\n${summary}\n${outSummary ? "\n" + outSummary : ""}\n\nWould you like me to draft replenishment purchase orders for your primary suppliers?`,
       detectedLang: detectedLang,
       tools: [
-        { name: "Scanned 15 store catalogue SKUs", status: "completed", icon: "search" },
-        { name: `Identified ${lowStockItems.length} SKUs below minimum threshold`, status: "completed", icon: "alert" }
+        { name: `Scanned ${this.store.products.length} store catalogue SKUs`, status: "completed", icon: "search" },
+        { name: `Identified ${stockCounts.low} low-stock SKUs and ${stockCounts.out} out-of-stock SKU`, status: "completed", icon: "alert" }
       ],
       calculation: null,
       actionCard: null
@@ -222,7 +296,7 @@ class ShopSahayakAIEngine {
 
     if (this.onStateChange) this.onStateChange("ai_thinking", false);
     if (this.onStateChange) this.onStateChange("message_added", { history: this.chatHistory });
-    this.speakText(`You have ${lowStockItems.length} products below minimum stock level including Rice, Fortune Oil, and Maggi Noodles.`);
+    this.speakText(`You have ${stockCounts.low} products below safety stock and 1 out of stock item.`);
   }
 
   // ------------------------------------------------------------------------
@@ -233,7 +307,7 @@ class ShopSahayakAIEngine {
     this.chatHistory.push({
       id: aiMsgId,
       sender: "ai",
-      text: `Today's revenue is ₹${this.store.metrics.todayRevenue.toLocaleString('en-IN')} across ${this.store.metrics.todayOrders} customer orders. Estimated gross profit is ₹${this.store.metrics.estimatedProfit.toLocaleString('en-IN')} (approx 33.8% margin). Highest velocity was between 6:00 PM and 8:30 PM.`,
+      text: `Today's revenue is ₹${this.store.metrics.todayRevenue.toLocaleString('en-IN')} across ${this.store.metrics.todayOrders} customer orders. Estimated gross profit is ₹${this.store.metrics.estimatedProfit.toLocaleString('en-IN')} (approx ${this.store.metrics.profitMargin}% margin). Highest velocity was between 6:00 PM and 8:30 PM.`,
       detectedLang: detectedLang,
       tools: [
         { name: "Compiled live POS ledger entries", status: "completed", icon: "chart" },
@@ -245,7 +319,7 @@ class ShopSahayakAIEngine {
 
     if (this.onStateChange) this.onStateChange("ai_thinking", false);
     if (this.onStateChange) this.onStateChange("message_added", { history: this.chatHistory });
-    this.speakText(`Today's revenue is ₹${this.store.metrics.todayRevenue.toLocaleString('en-IN')} with ${this.store.metrics.todayOrders} orders. Profit margin is running strong at 33 percent.`);
+    this.speakText(`Today's revenue is ₹${this.store.metrics.todayRevenue.toLocaleString('en-IN')} with ${this.store.metrics.todayOrders} orders. Profit margin is running at ${this.store.metrics.profitMargin} percent.`);
   }
 
   // ------------------------------------------------------------------------
@@ -253,7 +327,6 @@ class ShopSahayakAIEngine {
   // ------------------------------------------------------------------------
   async executeKhataAnalysisWorkflow(detectedLang, isVoice) {
     const totalKhata = this.store.customers.reduce((acc, c) => acc + (c.khataBalance || 0), 0);
-    const topKhata = this.store.customers.filter(c => c.khataBalance > 0);
 
     const aiMsgId = "msg-ai-" + Date.now();
     this.chatHistory.push({
@@ -296,46 +369,111 @@ class ShopSahayakAIEngine {
   }
 
   // ------------------------------------------------------------------------
-  // APPROVE PURCHASE ORDER ACTION
+  // APPROVE PURCHASE ORDER ACTION (ROUTED THROUGH CONFIRMATION DIALOG)
   // ------------------------------------------------------------------------
-  approvePurchaseOrder(actionCardId) {
-    // Find the message with this action card
-    const msg = this.chatHistory.find(m => m.actionCard && m.actionCard.id === actionCardId);
-    if (!msg || !msg.actionCard) return;
-
-    const { product, quantity, supplier } = msg.actionCard;
+  approvePurchaseOrder(actionCardId, autoConfirmDelayMs = 0) {
+    let msg = this.chatHistory.find(m => m.actionCard && m.actionCard.id === actionCardId);
     
-    // Execute real store update
-    if (actionCardId === "action-po-rice") {
-      this.store.restockProduct("PROD-001", quantity, supplier);
-    } else if (actionCardId === "action-po-oil") {
-      this.store.restockProduct("PROD-003", quantity, supplier);
+    // Idempotent: If action card is missing (e.g. direct step jump), create card first
+    if (!msg || !msg.actionCard) {
+      const riceProd = this.store.products.find(p => p.id === "PROD-001");
+      const stockQty = riceProd ? riceProd.stock : 18;
+      const buyPrice = riceProd ? riceProd.purchasePrice : 54;
+      const reorderQty = 100;
+      const totalCost = reorderQty * buyPrice;
+
+      msg = {
+        id: "msg-ai-" + Date.now(),
+        sender: "ai",
+        text: `Restocking recommendation: Order ${reorderQty} kg of Sona Masoori Raw Rice from ABC Distributors.`,
+        detectedLang: "English",
+        actionCard: {
+          id: actionCardId || "action-po-rice",
+          title: "Recommended Replenishment Order",
+          product: "Sona Masoori Raw Rice",
+          productId: "PROD-001",
+          quantity: reorderQty,
+          unit: "kg",
+          unitPrice: buyPrice,
+          supplier: "ABC Distributors",
+          estimatedCost: totalCost,
+          status: "pending_approval"
+        }
+      };
+      this.chatHistory.push(msg);
+      if (this.onStateChange) this.onStateChange("message_added", { history: this.chatHistory });
     }
 
-    // Mark card as approved
-    msg.actionCard.status = "approved";
+    // If already approved, do not double-approve
+    if (msg.actionCard.status === "approved") {
+      if (window.shopUI) {
+        window.shopUI.showToast("This purchase order has already been approved and recorded.", "info");
+      }
+      return;
+    }
 
-    // Add confirmation message
+    const { productId, quantity, supplier } = msg.actionCard;
+    const prodId = productId || (actionCardId === "action-po-oil" ? "PROD-003" : "PROD-001");
+
+    // Route through unified security dialog pipeline
+    if (window.shopUI && window.shopUI.requestPurchaseOrderApproval) {
+      window.shopUI.requestPurchaseOrderApproval({
+        productId: prodId,
+        quantity: quantity || 100,
+        supplierName: supplier || "ABC Distributors",
+        actionCardId: actionCardId,
+        autoConfirmDelayMs: autoConfirmDelayMs
+      });
+    }
+  }
+
+  // Called when confirmation dialog is actually confirmed
+  finalizeActionCardApproval(actionCardId, poNumber, quantity, finalCost) {
+    const msg = this.chatHistory.find(m => m.actionCard && m.actionCard.id === actionCardId);
+    if (msg && msg.actionCard) {
+      msg.actionCard.status = "approved";
+    }
+
+    const stockCounts = this.store.recalculateStockCounts();
+    const lowStockCount = stockCounts.low;
+
     this.chatHistory.push({
       id: "msg-confirm-" + Date.now(),
       sender: "ai",
-      text: `✓ Purchase order confirmed! ${quantity} ${msg.actionCard.unit} of ${product} has been ordered from ${supplier}. Inventory stock and dashboard health have been automatically updated.`,
+      text: `✓ Purchase order confirmed! ${quantity} kg of Sona Masoori Raw Rice has been ordered from ABC Distributors. Inventory stock and dashboard health have been automatically updated.`,
       detectedLang: "System",
       tools: [
-        { name: "Generated PO-8831 sent to ABC Distributors", status: "completed", icon: "check" },
-        { name: "Store inventory updated (+100 kg Sona Masoori Rice)", status: "completed", icon: "check" },
-        { name: "Dashboard stock health recalculated: Low Stock reduced to 5", status: "completed", icon: "check" }
+        { name: `Generated ${poNumber} sent to ABC Distributors`, status: "completed", icon: "check" },
+        { name: `Store inventory updated (+${quantity} kg Sona Masoori Rice)`, status: "completed", icon: "check" },
+        { name: `Dashboard stock health recalculated: Low Stock reduced to ${lowStockCount}`, status: "completed", icon: "check" }
       ],
       calculation: null,
       actionCard: null
     });
 
     if (this.onStateChange) this.onStateChange("message_added", { history: this.chatHistory });
-    this.speakText(`Purchase order has been created. One hundred kilograms of Sona Masoori Rice is recorded, and store inventory is updated.`);
+    this.speakText(`Purchase order ${poNumber} has been created. Added ${quantity} kg of Sona Masoori Rice to inventory.`);
   }
 
   // ------------------------------------------------------------------------
-  // LIVEKIT VOICE AI SIMULATION
+  // SCRIPTED VOICE QUERY SIMULATION (NO MIC PROMPT FOR DEMO STEP 5)
+  // ------------------------------------------------------------------------
+  simulateVoiceQuery(queryText = "Anna, rice stock entha undi?") {
+    this.voiceState = "listening";
+    if (this.onStateChange) this.onStateChange("voice_state", { state: "listening" });
+
+    setTimeout(() => {
+      this.voiceState = "processing";
+      if (this.onStateChange) this.onStateChange("voice_state", { state: "processing", transcript: queryText });
+      
+      setTimeout(() => {
+        this.processUserQuery(queryText, true);
+      }, 700);
+    }, 1200);
+  }
+
+  // ------------------------------------------------------------------------
+  // LIVEKIT VOICE AI LISTENING (FOR REAL MICROPHONE USE)
   // ------------------------------------------------------------------------
   startVoiceListening() {
     this.voiceState = "listening";
@@ -346,7 +484,16 @@ class ShopSahayakAIEngine {
     if (SpeechRecognition) {
       try {
         const recognition = new SpeechRecognition();
-        recognition.lang = "en-IN"; // Indian English / Hinglish / Telugu code-switch
+        
+        // Dynamically set recognition language from UI language
+        const langMap = {
+          en: "en-IN",
+          te: "te-IN",
+          hi: "hi-IN"
+        };
+        const currentLang = this.store ? this.store.currentLanguage : "en";
+        recognition.lang = langMap[currentLang] || "en-IN";
+
         recognition.interimResults = false;
         recognition.maxAlternatives = 1;
 
@@ -374,7 +521,7 @@ class ShopSahayakAIEngine {
   }
 
   fallbackVoiceSimulation() {
-    // Simulated Voice prompt for the hackathon demo
+    // Simulated Voice prompt fallback
     setTimeout(() => {
       this.voiceState = "processing";
       const sampleVoiceQuery = "Anna, rice stock entha undi?";

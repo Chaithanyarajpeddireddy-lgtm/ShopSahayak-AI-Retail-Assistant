@@ -41,7 +41,7 @@ Built for the official Hackathon Problem Statement:
 - **Supplier & Distributor Management:** Supplier directories (*ABC Distributors, Balaji Trading Co, Sri Lakshmi Wholesalers, Amul Co-op Depot*), pending purchase orders, and direct reorder triggers.
 - **Analytics & Executive Reports:** 6 specialized analytics modules, daily/weekly AI business summaries, and 1-click **Export to CSV, Excel, and Printable PDF**.
 - **Role-Based Access Control (RBAC):** Switchable permission matrix (*Owner, Manager, Staff, Viewer*) protecting sensitive financial metrics and settings.
-- **Security UX:** 2-step verification dialog for high-impact financial actions (*"Create purchase order for ₹8,400?"*).
+- **Security UX:** 2-step verification dialog for high-impact financial actions (*"Create purchase order for ₹5,400?"*).
 
 ---
 
@@ -50,18 +50,18 @@ Built for the official Hackathon Problem Statement:
 An interactive walkthrough banner at the top of the interface allows evaluators to execute or auto-play the complete 13-step demonstration:
 
 1. **Owner logs in:** Ravi Sharma (Owner) session activates.
-2. **Dashboard overview:** Displays revenue (₹18,450), orders (47), profit (₹6,240), and low stock (6).
-3. **AI insight triggers:** Flags *"6 products are below minimum stock level. Rice demand increased +21%"*.
+2. **Dashboard overview:** Displays revenue (₹18,450), orders (47), estimated profit (₹2,723 • 14.8%), and low stock (7).
+3. **AI insight triggers:** Flags *"7 products are below minimum stock level. Rice demand increased +21%"*.
 4. **Owner opens AI Assistant:** Launches the dedicated ShopSahayak Command Center.
 5. **Owner speaks via Voice:** Asks: *"Anna, rice stock entha undi?"*.
 6. **LiveKit handles stream:** Voice waveform animates, language detected as *"Telugu + English"*.
 7. **AI responds:** *"You currently have 18 kg of rice. Current stock may run low in 48 hours."*
 8. **Agentic tool execution:** Visual execution timeline checks inventory, audits 30-day velocity (9.3 kg/day), and projects stockout.
-9. **Recommendation generated:** Recommends ordering 100 kg from ABC Distributors for ₹8,400.
-10. **Owner approves order:** Clicks *"Approve & Create Purchase Order"* with security confirmation dialog.
+9. **Recommendation generated:** Recommends ordering 100 kg from ABC Distributors for ₹5,400.
+10. **Owner approves order:** Approves order via 2-step security confirmation dialog.
 11. **Order confirmed:** Purchase order PO-8831 transmitted to ABC Distributors.
 12. **Inventory updates live:** Rice stock automatically increases from 18 kg to 118 kg across the store.
-13. **Updated business insights:** Low stock alert count drops and updated executive report is compiled.
+13. **Updated business insights:** Low stock alert count drops from 7 to 6, rice status becomes Healthy, and updated executive report is compiled.
 
 ---
 

@@ -22,7 +22,7 @@ const TRANSLATIONS = {
     navNotifications: "Notifications",
     navSettings: "Settings",
     aiCopilotPill: "Co-Pilot",
-    lowStockPill: "6 Low",
+    lowStockPill: "7 Low",
     syncStatus: "Tally/POS Synced (2m)",
 
     // Topbar
@@ -49,7 +49,7 @@ const TRANSLATIONS = {
     kpiCustomers: "Active Customers",
     vsYesterday: "vs yesterday",
     avgBill: "avg bill ₹392",
-    grossMargin: "33.8% gross margin",
+    grossMargin: "14.8% gross margin",
     needsAttention: "Needs attention",
     twoCritical: "2 critical",
     customerSplit: "18 regular, 6 walk-in",
@@ -64,7 +64,7 @@ const TRANSLATIONS = {
     insightRiceTitle: "Rice demand increased 21% this week.",
     insightRiceDesc: "Bulk household purchases detected in Ward 12. Current stock may deplete in 48 hours.",
     reviewInventory: "Review Inventory →",
-    insightLowStockTitle: "6 products are below their minimum stock level.",
+    insightLowStockTitle: "7 products are below their minimum stock level.",
     insightLowStockDesc: "Fortune Sunflower Oil, Tata Salt, and Maggi Noodles reaching critical threshold.",
     reviewLowStock: "Review Low Stock →",
     insightOilTitle: "Cooking oil sales trending upward (+18%).",
@@ -123,7 +123,7 @@ const TRANSLATIONS = {
     callBtn: "Call",
     createPoBtn: "+ Create Purchase Order",
     exportCsv: "Export CSV",
-    exportExcel: "Export Excel",
+    exportExcel: "Export CSV (opens in Excel)",
     printPdf: "Print PDF Report",
     markAllRead: "Mark All Read",
     sendKhataReminders: "Send Khata Reminders",
@@ -194,7 +194,7 @@ const TRANSLATIONS = {
     reportsTitle: "Executive Business Reports",
     reportsSubtitle: "AI-generated daily, weekly, and monthly summaries with exportable ledger spreadsheets",
     dailyAiReportBadge: "✦ Daily AI Executive Report",
-    reportDateSub: "Generated for Oct 24, 2024",
+    reportDateSub: "Generated for Today",
     grossRevenue: "Gross Revenue",
     estGrossMargin: "Estimated Gross Margin",
     outstandingKhata: "Outstanding Khata",
@@ -369,6 +369,7 @@ const TRANSLATIONS = {
     loginSkipDemo: "Skip face scan (demo mode)",
     loginSkipDemoHint: "Camera unavailable or testing offline? Use demo bypass:",
     logoutBtn: "Logout",
+    logoutSuccess: "Logged out successfully.",
     welcomeBackToast: "Welcome back, Ravi Sharma! Store data synchronized."
   },
 
@@ -390,7 +391,7 @@ const TRANSLATIONS = {
     navNotifications: "నోటిఫికేషన్లు",
     navSettings: "సెట్టింగ్స్",
     aiCopilotPill: "కో-పైలట్",
-    lowStockPill: "6 తక్కువ",
+    lowStockPill: "7 తక్కువ",
     syncStatus: "టాలీ/POS సింక్ అయింది (2ని)",
 
     // Topbar
@@ -417,7 +418,7 @@ const TRANSLATIONS = {
     kpiCustomers: "యాక్టివ్ కస్టమర్లు",
     vsYesterday: "నిన్నటితో పోలిస్తే",
     avgBill: "సగటు బిల్లు ₹392",
-    grossMargin: "33.8% స్థూల మార్జిన్",
+    grossMargin: "14.8% స్థూల మార్జిన్",
     needsAttention: "శ్రద్ధ అవసరం",
     twoCritical: "2 అత్యవసరం",
     customerSplit: "18 రెగ్యులర్, 6 వాక్-ఇన్",
@@ -432,7 +433,7 @@ const TRANSLATIONS = {
     insightRiceTitle: "ఈ వారం బియ్యం డిమాండ్ 21% పెరిగింది.",
     insightRiceDesc: "వార్డ్ 12లో పెద్ద మొత్తంలో కొనుగోళ్లు జరిగాయి. ప్రస్తుత స్టాక్ 48 గంటల్లో అయిపోవచ్చు.",
     reviewInventory: "ఇన్వెంటరీ పరిశీలించండి →",
-    insightLowStockTitle: "6 వస్తువులు కనీస స్టాక్ స్థాయి కంటే తక్కువగా ఉన్నాయి.",
+    insightLowStockTitle: "7 వస్తువులు కనీస స్టాక్ స్థాయి కంటే తక్కువగా ఉన్నాయి.",
     insightLowStockDesc: "ఫార్చ్యూన్ సన్‌ఫ్లవర్ ఆయిల్, టాటా ఉప్పు, మ్యాగీ నూడుల్స్ ప్రమాదకర స్థాయికి చేరాయి.",
     reviewLowStock: "తక్కువ స్టాక్ చూడండి →",
     insightOilTitle: "వంట నూనె అమ్మకాలు పెరుగుతున్నాయి (+18%).",
@@ -491,7 +492,7 @@ const TRANSLATIONS = {
     callBtn: "కాల్ చేయండి",
     createPoBtn: "+ కొనుగోలు ఆర్డర్ సృష్టించండి",
     exportCsv: "CSV డౌన్‌లోడ్",
-    exportExcel: "Excel డౌన్‌లోడ్",
+    exportExcel: "CSV డౌన్‌లోడ్ (Excel లో ఓపెన్ అవుతుంది)",
     printPdf: "PDF ప్రింట్ చేయండి",
     markAllRead: "అన్నీ చదివినట్లు గుర్తించు",
     sendKhataReminders: "ఖాతా రిమైండర్లు పంపండి",
@@ -562,7 +563,7 @@ const TRANSLATIONS = {
     reportsTitle: "ఎగ్జిక్యూటివ్ వ్యాపార రిపోర్టులు",
     reportsSubtitle: "AI రూపొందించిన రోజువారీ, వారపు లెడ్జర్ స్ప్రెడ్‌షీట్లు మరియు వివరాలు",
     dailyAiReportBadge: "✦ రోజువారీ AI ఎగ్జిక్యూటివ్ రిపోర్ట్",
-    reportDateSub: "తేదీ: 24 అక్టోబర్, 2024",
+    reportDateSub: "ఈ రోజు కోసం రూపొందించబడింది",
     grossRevenue: "స్థూల ఆదాయం",
     estGrossMargin: "అంచనా స్థూల లాభం",
     outstandingKhata: "వసూలు కావాల్సిన ఖాతా బాకీ",
@@ -737,6 +738,7 @@ const TRANSLATIONS = {
     loginSkipDemo: "ఫేస్ స్కాన్ దాటవేయి (డెమో మోడ్)",
     loginSkipDemoHint: "కెమెరా అందుబాటులో లేదా? డెమో బైపాస్ ఉపయోగించండి:",
     logoutBtn: "లాగ్ అవుట్",
+    logoutSuccess: "విజయవంతంగా లాగ్ అవుట్ అయ్యారు.",
     welcomeBackToast: "తిరిగి స్వాగతం, రవి శర్మ గారు! దుకాణం డేటా సమకాలీకరించబడింది."
   },
 
@@ -758,7 +760,7 @@ const TRANSLATIONS = {
     navNotifications: "सूचनाएं",
     navSettings: "सेटिंग्स",
     aiCopilotPill: "को-पायलट",
-    lowStockPill: "6 कम",
+    lowStockPill: "7 कम",
     syncStatus: "टैली/POS सिंक हुआ (2 मिनट)",
 
     // Topbar
@@ -785,7 +787,7 @@ const TRANSLATIONS = {
     kpiCustomers: "सक्रिय ग्राहक",
     vsYesterday: "कल की तुलना में",
     avgBill: "औसत बिल ₹392",
-    grossMargin: "33.8% ग्रॉस मार्जिन",
+    grossMargin: "14.8% ग्रॉस मार्जिन",
     needsAttention: "ध्यान आवश्यक",
     twoCritical: "2 अत्यंत कम",
     customerSplit: "18 नियमित, 6 नए ग्राहक",
@@ -800,7 +802,7 @@ const TRANSLATIONS = {
     insightRiceTitle: "इस सप्ताह चावल की मांग में 21% की वृद्धि हुई है।",
     insightRiceDesc: "वार्ड 12 में घरेलू थोक खरीदारी देखी गई। मौजूदा स्टॉक 48 घंटे में खत्म हो सकता है।",
     reviewInventory: "स्टॉक देखें →",
-    insightLowStockTitle: "6 उत्पाद अपने न्यूनतम स्टॉक स्तर से नीचे हैं।",
+    insightLowStockTitle: "7 उत्पाद अपने न्यूनतम स्टॉक स्तर से नीचे हैं।",
     insightLowStockDesc: "फॉर्च्यून सनफ्लावर ऑयल, टाटा नमक और मैगी नूडल्स खतरे के निशान पर हैं।",
     reviewLowStock: "कम स्टॉक जांचें →",
     insightOilTitle: "कुकिंग ऑयल की बिक्री बढ़ रही है (+18%)।",
@@ -859,7 +861,7 @@ const TRANSLATIONS = {
     callBtn: "कॉल करें",
     createPoBtn: "+ खरीद ऑर्डर बनाएं",
     exportCsv: "CSV डाउनलोड",
-    exportExcel: "Excel डाउनलोड",
+    exportExcel: "CSV डाउनलोड (Excel में खुलता है)",
     printPdf: "PDF प्रिंट करें",
     markAllRead: "सभी पढ़ा हुआ मार्क करें",
     sendKhataReminders: "खाता तकादा भेजें",
@@ -930,7 +932,7 @@ const TRANSLATIONS = {
     reportsTitle: "व्यापारिक रिपोर्ट्स व हिसाब",
     reportsSubtitle: "AI द्वारा तैयार दैनिक व साप्ताहिक रिपोर्ट और एक्सेल लेजर",
     dailyAiReportBadge: "✦ दैनिक AI बिज़नेस रिपोर्ट",
-    reportDateSub: "दिनांक: 24 अक्टूबर 2024",
+    reportDateSub: "आज के लिए उत्पन्न",
     grossRevenue: "कुल कमाई",
     estGrossMargin: "अनुमानित मुनाफा",
     outstandingKhata: "बाकी उधारी",
@@ -1105,6 +1107,7 @@ const TRANSLATIONS = {
     loginSkipDemo: "फेस स्कैन छोड़ें (डेमो मोड)",
     loginSkipDemoHint: "कैमरा उपलब्ध नहीं है? डेमो बाईपास का उपयोग करें:",
     logoutBtn: "लॉग आउट",
+    logoutSuccess: "सफलतापूर्वक लॉग आउट हो गया।"
     welcomeBackToast: "वापसी पर स्वागत है, रवि शर्मा जी! दुकान का डेटा सिंक हो गया है।"
   }
 };

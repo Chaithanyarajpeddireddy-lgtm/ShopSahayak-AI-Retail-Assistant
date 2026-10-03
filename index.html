@@ -186,7 +186,7 @@
                 <svg class="nav-item-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/></svg>
                 <span class="nav-item-label" data-i18n="navInventory">Inventory</span>
               </div>
-              <span class="nav-pill nav-pill-amber" id="sidebarLowStockPill" data-i18n="lowStockPill">6 Low</span>
+              <span class="nav-pill nav-pill-amber" id="sidebarLowStockPill" data-i18n="lowStockPill">7 Low</span>
             </a>
 
             <a class="nav-item" data-view="sales">
@@ -381,10 +381,10 @@
                 <span class="kpi-title" data-i18n="kpiProfit">Estimated Profit</span>
                 <span class="kpi-icon">💰</span>
               </div>
-              <div class="kpi-value tabular-nums" id="kpiProfitVal">₹6,240</div>
+              <div class="kpi-value tabular-nums" id="kpiProfitVal">₹2,723</div>
               <div class="kpi-footer">
                 <span class="trend-badge trend-positive">↑ +6.7%</span>
-                <span class="trend-subtext" data-i18n="grossMargin">33.8% gross margin</span>
+                <span class="trend-subtext" data-i18n="grossMargin">14.8% gross margin</span>
               </div>
             </div>
 
@@ -393,7 +393,7 @@
                 <span class="kpi-title" data-i18n="kpiLowStock">Low Stock Items</span>
                 <span class="kpi-icon">⚠</span>
               </div>
-              <div class="kpi-value tabular-nums" id="kpiLowStockVal" style="color:var(--color-warning-dark);">6</div>
+              <div class="kpi-value tabular-nums" id="kpiLowStockVal" style="color:var(--color-warning-dark);">7</div>
               <div class="kpi-footer">
                 <span class="badge badge-warning" data-i18n="needsAttention">Needs attention</span>
                 <span class="trend-subtext" data-i18n="twoCritical">2 critical</span>
@@ -1024,7 +1024,7 @@
             </div>
             <div class="page-actions">
               <button class="btn btn-secondary" onclick="window.shopUI.exportReport('csv')" data-i18n="exportCsv">Export CSV</button>
-              <button class="btn btn-secondary" onclick="window.shopUI.exportReport('excel')" data-i18n="exportExcel">Export Excel</button>
+              <button class="btn btn-secondary" onclick="window.shopUI.exportReport('excel')" data-i18n="exportExcel">Export CSV (opens in Excel)</button>
               <button class="btn btn-primary" onclick="window.shopUI.exportReport('pdf')" data-i18n="printPdf">Print PDF Report</button>
             </div>
           </div>
@@ -1037,7 +1037,7 @@
               </div>
               <div class="report-badge-box">
                 <span class="badge badge-ai" style="font-size:var(--font-size-xs); padding:4px 10px;" data-i18n="dailyAiReportBadge">✦ Daily AI Executive Report</span>
-                <div style="font-size:var(--font-size-xs); color:var(--color-text-muted); margin-top:3px;" data-i18n="reportDateSub">Generated for Oct 24, 2024</div>
+                <div style="font-size:var(--font-size-xs); color:var(--color-text-muted); margin-top:3px;" data-i18n="reportDateSub" id="reportGeneratedDate">Generated for Today</div>
               </div>
             </div>
 
@@ -1054,8 +1054,8 @@
               </div>
               <div class="kpi-card">
                 <span class="kpi-title" data-i18n="estGrossMargin">Estimated Gross Margin</span>
-                <div class="kpi-value" style="color:var(--color-success-dark);">₹6,240</div>
-                <span class="trend-subtext">33.8% profitability</span>
+                <div class="kpi-value" style="color:var(--color-success-dark);">₹2,723</div>
+                <span class="trend-subtext">14.8% profitability</span>
               </div>
               <div class="kpi-card">
                 <span class="kpi-title" data-i18n="outstandingKhata">Outstanding Khata</span>
@@ -1368,7 +1368,7 @@
             </div>
             <div style="text-align:right;">
               <span style="font-size:var(--font-size-xs); color:var(--color-text-muted);" data-i18n="totalCostLabel">Total Cost</span>
-              <div id="restockEstCost" style="font-size:var(--font-size-lg); font-weight:700; color:var(--color-primary);">₹8,400</div>
+              <div id="restockEstCost" style="font-size:var(--font-size-lg); font-weight:700; color:var(--color-primary);">₹5,400</div>
             </div>
           </div>
         </div>
@@ -1395,7 +1395,7 @@
           Are you sure you want to approve purchase order?
         </p>
         <div id="secConfirmAmount" style="font-size:24px; font-weight:800; color:var(--color-primary);" class="tabular-nums">
-          ₹8,400
+          ₹5,400
         </div>
         <p id="secConfirmDetails" style="font-size:var(--font-size-xs); color:var(--color-text-muted);" data-i18n="secTermsDetails">
           Quantity: 100 kg • Terms: Net 7 Days Credit

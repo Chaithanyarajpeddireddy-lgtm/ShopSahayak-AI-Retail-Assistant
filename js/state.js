@@ -17,18 +17,42 @@ class StoreState {
     this.currentView = "overview";
     this.listeners = [];
 
+    // Dynamic PO Counter (Starts at PO-8831)
+    this.nextPoCounter = 8831;
+
     // Computed metrics for dashboard
     this.metrics = {
       todayRevenue: 18450,
       todayOrders: 47,
-      estimatedProfit: 6240,
+      estimatedProfit: 0,
       activeCustomers: 24,
-      lowStockCount: 6,
-      healthyStockCount: 8,
-      outOfStockCount: 1
+      lowStockCount: 0,
+      healthyStockCount: 0,
+      outOfStockCount: 0
     };
 
     this.recalculateStockCounts();
+    this.recalculateProfitMetrics();
+  }
+
+  getNextPONumber() {
+    const po = `PO-${this.nextPoCounter}`;
+    this.nextPoCounter += 1;
+    return po;
+  }
+
+  getCatalogAverageMargin() {
+    if (!this.products || this.products.length === 0) return 0.148;
+    const totalMargin = this.products.reduce((acc, p) => {
+      const margin = p.sellingPrice > 0 ? (p.sellingPrice - p.purchasePrice) / p.sellingPrice : 0;
+      return acc + margin;
+    }, 0);
+    return totalMargin / this.products.length;
+  }
+
+  recalculateProfitMetrics() {
+    const avgMargin = this.getCatalogAverageMargin();
+    this.metrics.estimatedProfit = Math.round(this.metrics.todayRevenue * avgMargin);
   }
 
   subscribe(listener) {
@@ -78,6 +102,7 @@ class StoreState {
     this.metrics.lowStockCount = low;
     this.metrics.healthyStockCount = healthy;
     this.metrics.outOfStockCount = out;
+    return { low, healthy, out };
   }
 
   addProduct(newProduct) {
@@ -101,22 +126,28 @@ class StoreState {
 
     this.products.unshift(item);
     this.recalculateStockCounts();
+    this.recalculateProfitMetrics();
     this.notify("product_added", item);
     return item;
   }
 
-  restockProduct(productId, quantity, supplierName) {
+  restockProduct(productId, quantity, supplierName, poNumber) {
     const prod = this.products.find(p => p.id === productId);
     if (prod) {
       const oldStock = prod.stock;
-      prod.stock += Number(quantity);
+      const numQty = Number(quantity);
+      prod.stock += numQty;
       this.recalculateStockCounts();
 
-      // Create simulated Purchase Order entry in supplier
-      const supp = this.suppliers.find(s => s.name === (supplierName || prod.supplierName));
+      // Reliable supplier lookup by ID or name
+      const supp = this.suppliers.find(s => s.id === prod.supplierId || s.name === (supplierName || prod.supplierName));
+      const orderCost = prod.purchasePrice * numQty;
+      const assignedPo = poNumber || this.getNextPONumber();
+
       if (supp) {
         supp.pendingOrders += 1;
-        supp.totalPurchased += (prod.purchasePrice * quantity);
+        supp.totalPurchased += orderCost;
+        supp.lastOrderDate = "Today, " + new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
       }
 
       // Add a notification
@@ -124,15 +155,15 @@ class StoreState {
         id: "NOTIF-" + Date.now(),
         category: "Orders",
         severity: "success",
-        title: "Purchase Order Dispatched",
-        message: `Ordered ${quantity} ${prod.unit} of ${prod.name} from ${prod.supplierName}. Stock updated to ${prod.stock} ${prod.unit}.`,
+        title: `Purchase Order Dispatched (${assignedPo})`,
+        message: `Ordered ${numQty} ${prod.unit} of ${prod.name} from ${prod.supplierName} (₹${orderCost.toLocaleString("en-IN")}, ${assignedPo}). Stock updated to ${prod.stock} ${prod.unit}.`,
         time: "Just now",
         read: false,
         action: "open_inventory",
         target: prod.id
       });
 
-      this.notify("product_restocked", { product: prod, added: quantity, oldStock });
+      this.notify("product_restocked", { product: prod, added: numQty, oldStock, poNumber: assignedPo, orderCost });
       return prod;
     }
     return null;
@@ -156,7 +187,7 @@ class StoreState {
     this.transactions.unshift(transaction);
     this.metrics.todayRevenue += amount;
     this.metrics.todayOrders += 1;
-    this.metrics.estimatedProfit += Math.round(amount * 0.18); // ~18% average margin
+    this.metrics.estimatedProfit += Math.round(amount * this.getCatalogAverageMargin());
 
     this.notify("sale_completed", transaction);
     return transaction;

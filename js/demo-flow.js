@@ -28,7 +28,7 @@ class HackathonDemoFlow {
       {
         num: 2,
         title: "Dashboard Overview",
-        desc: "Review Today's Revenue (₹18,450), Orders (47), Estimated Profit (₹6,240), and Low Stock (6).",
+        desc: "Review Today's Revenue (₹18,450), Orders (47), Estimated Profit (₹2,723 • 14.8%), and Low Stock (7).",
         action: () => {
           this.ui.switchView("overview");
         }
@@ -36,7 +36,7 @@ class HackathonDemoFlow {
       {
         num: 3,
         title: "AI Business Insight Triggers",
-        desc: "AI Insight detects: '6 products are below their minimum stock level. Rice demand increased +21%'.",
+        desc: "AI Insight detects: '7 products are below their minimum stock level. Rice demand increased +21%'.",
         action: () => {
           this.ui.switchView("overview");
           const banner = document.getElementById("dashAiBanner");
@@ -62,7 +62,8 @@ class HackathonDemoFlow {
           this.ui.switchView("ai-assistant");
           const input = document.getElementById("aiChatInput");
           if (input) input.value = "Anna, rice stock entha undi?";
-          this.aiEngine.startVoiceListening();
+          // Scripted voice query path: shows waveform and language recognition without microphone permission prompt
+          this.aiEngine.simulateVoiceQuery("Anna, rice stock entha undi?");
         }
       },
       {
@@ -92,7 +93,7 @@ class HackathonDemoFlow {
       {
         num: 9,
         title: "Restocking Recommendation Generated",
-        desc: "AI recommends replenishing 100 kg Sona Masoori Rice from ABC Distributors for ₹8,400.",
+        desc: "AI recommends replenishing 100 kg Sona Masoori Rice from ABC Distributors for ₹5,400.",
         action: () => {
           // Action card visible with [Review] and [Approve] buttons
         }
@@ -100,9 +101,12 @@ class HackathonDemoFlow {
       {
         num: 10,
         title: "Owner Approves Purchase Order",
-        desc: "Owner clicks 'Approve & Create Purchase Order' with security confirmation dialog.",
+        desc: "Owner approves purchase order through security confirmation dialog.",
         action: () => {
-          this.aiEngine.approvePurchaseOrder("action-po-rice");
+          this.ui.switchView("ai-assistant");
+          // In auto-play, automatically confirm after 1200ms visible pause; in manual stepping, presenter confirms
+          const autoConfirmDelay = this.isPlaying ? 1200 : 0;
+          this.aiEngine.approvePurchaseOrder("action-po-rice", autoConfirmDelay);
         }
       },
       {
@@ -110,6 +114,7 @@ class HackathonDemoFlow {
         title: "Purchase Order Confirmed",
         desc: "AI displays confirmation badge: '✓ Purchase order PO-8831 sent to ABC Distributors'.",
         action: () => {
+          this.ui.switchView("ai-assistant");
           this.ui.showToast("Purchase order PO-8831 created successfully!", "success");
         }
       },
@@ -124,7 +129,7 @@ class HackathonDemoFlow {
       {
         num: 13,
         title: "Updated Business Insights Generated",
-        desc: "Low stock count drops, rice status changes to Healthy, and updated store report is ready!",
+        desc: "Low stock count drops from 7 to 6, rice status changes to Healthy, and updated store report is ready!",
         action: () => {
           this.ui.switchView("overview");
           this.ui.showToast("Complete Hackathon Demo Flow Executed Successfully!", "success");

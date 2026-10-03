@@ -12,6 +12,16 @@ document.addEventListener("DOMContentLoaded", () => {
   // Initialize Demo Flow
   if (demo) demo.init();
 
+  const escapeHtml = window.escapeHtml || function(str) {
+    if (str === null || str === undefined) return "";
+    return String(str)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+  };
+
   // Helper for Category localization
   function getLocalizedCategory(cat, lang) {
     const dict = TRANSLATIONS[lang] || TRANSLATIONS.en;
@@ -254,15 +264,15 @@ document.addEventListener("DOMContentLoaded", () => {
         <tr>
           <td>
             <div style="display:flex; flex-direction:column;">
-              <span style="font-weight:600;">${p.name}</span>
-              <span style="font-size:var(--font-size-xs); color:var(--color-text-muted); font-family:var(--font-family-mono);">${p.sku}</span>
+              <span style="font-weight:600;">${escapeHtml(p.name)}</span>
+              <span style="font-size:var(--font-size-xs); color:var(--color-text-muted); font-family:var(--font-family-mono);">${escapeHtml(p.sku)}</span>
             </div>
           </td>
           <td><span class="badge badge-neutral">${catName}</span></td>
           <td>${statusBadge}</td>
-          <td class="tabular-nums" style="font-weight:600;">${Math.round(p.velocityDaily * 1.5)} ${p.unit}</td>
+          <td class="tabular-nums" style="font-weight:600;">${Math.round(p.velocityDaily * 1.5)} ${escapeHtml(p.unit)}</td>
           <td class="tabular-nums" style="font-weight:700;">₹${(Math.round(p.velocityDaily * 1.5) * p.sellingPrice).toLocaleString('en-IN')}</td>
-          <td><span class="badge badge-ai">${p.trend}</span></td>
+          <td><span class="badge badge-ai">${escapeHtml(p.trend)}</span></td>
           <td class="td-actions">
             <button class="btn btn-sm btn-secondary" onclick="window.shopUI.openRestockModal('${p.id}')">${dict.restockBtn}</button>
           </td>
@@ -282,8 +292,8 @@ document.addEventListener("DOMContentLoaded", () => {
     container.innerHTML = urgentItems.map(p => `
       <div class="restock-item-row">
         <div class="restock-item-left">
-          <span class="restock-item-name">${p.name}</span>
-          <span class="restock-item-sub">${dict.thCurrentStock}: ${p.stock} ${p.unit} • ${dict.thMinLevel}: ${p.minStock}</span>
+          <span class="restock-item-name">${escapeHtml(p.name)}</span>
+          <span class="restock-item-sub">${dict.thCurrentStock}: ${p.stock} ${escapeHtml(p.unit)} • ${dict.thMinLevel}: ${p.minStock}</span>
         </div>
         <button class="btn btn-sm btn-primary" onclick="window.shopUI.openRestockModal('${p.id}')">${dict.restockBtn}</button>
       </div>
@@ -314,16 +324,16 @@ document.addEventListener("DOMContentLoaded", () => {
         <tr>
           <td>
             <div style="display:flex; flex-direction:column;">
-              <span style="font-weight:600;">${p.name}</span>
-              <span style="font-size:var(--font-size-xs); color:var(--color-text-muted); font-family:var(--font-family-mono);">${p.sku}</span>
+              <span style="font-weight:600;">${escapeHtml(p.name)}</span>
+              <span style="font-size:var(--font-size-xs); color:var(--color-text-muted); font-family:var(--font-family-mono);">${escapeHtml(p.sku)}</span>
             </div>
           </td>
           <td><span class="badge badge-neutral">${catName}</span></td>
           <td class="tabular-nums">₹${p.purchasePrice}</td>
           <td class="tabular-nums" style="font-weight:600;">₹${p.sellingPrice}</td>
-          <td class="tabular-nums" style="font-weight:700;">${p.stock} ${p.unit}</td>
-          <td class="tabular-nums" style="color:var(--color-text-muted);">${p.minStock} ${p.unit}</td>
-          <td>${p.supplierName}</td>
+          <td class="tabular-nums" style="font-weight:700;">${p.stock} ${escapeHtml(p.unit)}</td>
+          <td class="tabular-nums" style="color:var(--color-text-muted);">${p.minStock} ${escapeHtml(p.unit)}</td>
+          <td>${escapeHtml(p.supplierName)}</td>
           <td>${badge}</td>
           <td class="td-actions">
             <button class="btn btn-sm btn-secondary" onclick="window.shopUI.openRestockModal('${p.id}')">${dict.restockBtn}</button>
@@ -348,13 +358,13 @@ document.addEventListener("DOMContentLoaded", () => {
         <tr>
           <td>
             <div style="display:flex; flex-direction:column;">
-              <span style="font-weight:600;">${p.name}</span>
-              <span style="font-size:var(--font-size-xs); color:var(--color-text-muted); font-family:var(--font-family-mono);">${p.sku}</span>
+              <span style="font-weight:600;">${escapeHtml(p.name)}</span>
+              <span style="font-size:var(--font-size-xs); color:var(--color-text-muted); font-family:var(--font-family-mono);">${escapeHtml(p.sku)}</span>
             </div>
           </td>
-          <td class="tabular-nums" style="font-weight:700;">${p.stock} ${p.unit}</td>
-          <td class="tabular-nums" style="color:var(--color-text-muted);">${p.minStock} ${p.unit}</td>
-          <td class="tabular-nums" style="color:var(--color-brand-accent); font-weight:600;">${p.velocityDaily} ${p.unit}/day</td>
+          <td class="tabular-nums" style="font-weight:700;">${p.stock} ${escapeHtml(p.unit)}</td>
+          <td class="tabular-nums" style="color:var(--color-text-muted);">${p.minStock} ${escapeHtml(p.unit)}</td>
+          <td class="tabular-nums" style="color:var(--color-brand-accent); font-weight:600;">${p.velocityDaily} ${escapeHtml(p.unit)}/day</td>
           <td>${badge}</td>
           <td style="font-size:var(--font-size-xs); color:var(--color-text-muted);">${lang === 'te' ? 'ఈరోజు, 10:45 AM' : (lang === 'hi' ? 'आज, 10:45 AM' : 'Today, 10:45 AM')}</td>
           <td class="td-actions">
@@ -377,12 +387,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
     tbody.innerHTML = store.transactions.map(t => `
       <tr>
-        <td style="font-family:var(--font-family-mono); font-weight:600;">${t.id}</td>
-        <td style="color:var(--color-text-muted); font-size:var(--font-size-xs);">${t.time}</td>
-        <td style="font-weight:600;">${t.customer}</td>
-        <td style="font-size:var(--font-size-sm); color:var(--color-text-secondary);">${t.itemsSummary}</td>
+        <td style="font-family:var(--font-family-mono); font-weight:600;">${escapeHtml(t.id)}</td>
+        <td style="color:var(--color-text-muted); font-size:var(--font-size-xs);">${escapeHtml(t.time)}</td>
+        <td style="font-weight:600;">${escapeHtml(t.customer)}</td>
+        <td style="font-size:var(--font-size-sm); color:var(--color-text-secondary);">${escapeHtml(t.itemsSummary)}</td>
         <td class="tabular-nums" style="font-weight:700;">₹${t.amount.toLocaleString('en-IN')}</td>
-        <td><span class="badge badge-neutral">${t.paymentMethod}</span></td>
+        <td><span class="badge badge-neutral">${escapeHtml(t.paymentMethod)}</span></td>
         <td><span class="badge badge-success">${dict.healthy === 'సరిపడా ఉంది' ? 'పూర్తయింది' : (dict.healthy === 'पर्याप्त' ? 'सफल' : 'Completed')}</span></td>
       </tr>
     `).join("");
@@ -403,21 +413,21 @@ document.addEventListener("DOMContentLoaded", () => {
         <td>
           <div style="display:flex; align-items:center; gap:10px;">
             <div style="width:32px; height:32px; border-radius:50%; background:#e2e8f0; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:var(--font-size-xs);">
-              ${c.name.slice(0, 2).toUpperCase()}
+              ${escapeHtml(c.name.slice(0, 2).toUpperCase())}
             </div>
             <div style="display:flex; flex-direction:column;">
-              <span style="font-weight:600;">${c.name}</span>
-              <span style="font-size:var(--font-size-xs); color:var(--color-text-muted);">${c.phone}</span>
+              <span style="font-weight:600;">${escapeHtml(c.name)}</span>
+              <span style="font-size:var(--font-size-xs); color:var(--color-text-muted);">${escapeHtml(c.phone)}</span>
             </div>
           </div>
         </td>
-        <td><span class="badge badge-neutral">${c.type}</span></td>
+        <td><span class="badge badge-neutral">${escapeHtml(c.type)}</span></td>
         <td class="tabular-nums" style="font-weight:600;">${c.ordersCount}</td>
         <td class="tabular-nums" style="font-weight:700;">₹${c.totalSpend.toLocaleString('en-IN')}</td>
         <td class="tabular-nums" style="font-weight:700; color:${c.khataBalance > 0 ? 'var(--color-danger)' : 'var(--color-text-muted)'};">
           ₹${(c.khataBalance || 0).toLocaleString('en-IN')}
         </td>
-        <td style="font-size:var(--font-size-xs); color:var(--color-text-muted);">${c.lastPurchase}</td>
+        <td style="font-size:var(--font-size-xs); color:var(--color-text-muted);">${escapeHtml(c.lastPurchase)}</td>
         <td class="td-actions">
           <button class="btn btn-sm btn-secondary" onclick="event.stopPropagation(); window.shopUI.openCustomerDrawer('${c.id}')">${dict.profileAiBtn}</button>
         </td>
@@ -439,15 +449,15 @@ document.addEventListener("DOMContentLoaded", () => {
       <div class="supplier-card">
         <div class="supplier-card-header">
           <div>
-            <div class="supplier-name">${s.name}</div>
-            <div class="supplier-category">${s.category}</div>
+            <div class="supplier-name">${escapeHtml(s.name)}</div>
+            <div class="supplier-category">${escapeHtml(s.category)}</div>
           </div>
           <span class="badge badge-success">${dict.healthy === 'సరిపడా ఉంది' ? 'యాక్టివ్' : (dict.healthy === 'पर्याप्त' ? 'सक्रिय' : 'Active')}</span>
         </div>
         <div class="supplier-contact-row">
-          <span>👤 ${s.contactPerson}</span>
+          <span>👤 ${escapeHtml(s.contactPerson)}</span>
           <span>•</span>
-          <span>📞 ${s.phone}</span>
+          <span>📞 ${escapeHtml(s.phone)}</span>
         </div>
         <div class="supplier-stats-row">
           <div>
@@ -461,7 +471,7 @@ document.addEventListener("DOMContentLoaded", () => {
         </div>
         <div style="display:flex; gap:8px; margin-top:4px;">
           <button class="btn btn-sm btn-primary" style="flex:1;" onclick="window.shopUI.openRestockModal('PROD-001')">${dict.createPoBtn}</button>
-          <a href="tel:${s.phone}" class="btn btn-sm btn-secondary" style="text-decoration:none;">${dict.callBtn}</a>
+          <a href="tel:${escapeHtml(s.phone)}" class="btn btn-sm btn-secondary" style="text-decoration:none;">${dict.callBtn}</a>
         </div>
       </div>
     `).join("");
@@ -488,11 +498,11 @@ document.addEventListener("DOMContentLoaded", () => {
         <div class="card" style="padding:14px; display:flex; align-items:flex-start; justify-content:space-between; gap:14px; border-left: 3px solid ${n.read ? 'transparent' : 'var(--color-brand-accent)'};">
           <div style="display:flex; flex-direction:column; gap:4px;">
             <div style="display:flex; align-items:center; gap:8px;">
-              <span class="badge ${badgeClass}">${n.category}</span>
-              <span style="font-weight:700; font-size:var(--font-size-base);">${n.title}</span>
-              <span style="font-size:var(--font-size-xs); color:var(--color-text-muted);">${n.time}</span>
+              <span class="badge ${badgeClass}">${escapeHtml(n.category)}</span>
+              <span style="font-weight:700; font-size:var(--font-size-base);">${escapeHtml(n.title)}</span>
+              <span style="font-size:var(--font-size-xs); color:var(--color-text-muted);">${escapeHtml(n.time)}</span>
             </div>
-            <p style="font-size:var(--font-size-sm); color:var(--color-text-secondary); line-height:1.45;">${n.message}</p>
+            <p style="font-size:var(--font-size-sm); color:var(--color-text-secondary); line-height:1.45;">${escapeHtml(n.message)}</p>
           </div>
           <div style="display:flex; align-items:center; gap:6px;">
             ${n.action === "open_ai_restock" ? `<button class="btn btn-sm btn-ai" onclick="window.shopUI.switchView('ai-assistant')">${dict.askAiBtn}</button>` : ''}
@@ -519,26 +529,33 @@ document.addEventListener("DOMContentLoaded", () => {
     const summaryBox = document.getElementById("reportSummaryContent");
     if (summaryBox) {
       const lang = store.currentLanguage;
+      const lowCount = store.metrics.lowStockCount;
+      const todayDate = new Date().toLocaleDateString(lang === 'te' ? 'te-IN' : (lang === 'hi' ? 'hi-IN' : 'en-IN'), {
+        day: 'numeric',
+        month: 'short',
+        year: 'numeric'
+      });
+
       if (lang === "te") {
         summaryBox.innerHTML = `
-          <strong>ఎగ్జిక్యూటివ్ స్టోర్ సారాంశం (24 అక్టోబర్, 2024):</strong><br/>
-          శర్మ కిరాణా స్టోర్ ఈరోజు 47 రిటైల్ లావాదేవీల ద్వారా ₹18,450 స్థూల ఆదాయాన్ని నమోదు చేసింది (18.2% రోజువారీ వృద్ధి). 
+          <strong>ఎగ్జిక్యూటివ్ స్టోర్ సారాంశం (${todayDate}):</strong><br/>
+          శర్మ కిరాణా స్టోర్ ఈరోజు ${store.metrics.todayOrders} రిటైల్ లావాదేవీల ద్వారా ₹${store.metrics.todayRevenue.toLocaleString('en-IN')} స్థూల ఆదాయాన్ని నమోదు చేసింది (18.2% రోజువారీ వృద్ధి). 
           వార్డ్ 12లో పండుగ సీజన్ నిత్యావసర కొనుగోళ్ల వల్ల సోనా మసూరి బియ్యం అమ్మకాలు +21% మరియు ఫార్చ్యూన్ సన్‌ఫ్లవర్ ఆయిల్ అమ్మకాలు +18% పెరిగాయి. 
-          AI కో-పైలట్ వారాంతపు రద్దీకి ముందే 6 వస్తువులు కనీస స్టాక్ కంటే తక్కువగా ఉన్నట్లు గుర్తించి, ABC డిస్ట్రిబ్యూటర్స్ మరియు బాలాజీ ట్రేడింగ్ కొరకు ఆటోమేటిక్ రీస్టాక్ ఆర్డర్లను సిద్ధం చేసింది.
+          AI కో-పైలట్ వారాంతపు రద్దీకి ముందే ${lowCount} వస్తువులు కనీస స్టాక్ కంటే తక్కువగా ఉన్నట్లు గుర్తించి, ABC డిస్ట్రిబ్యూటర్స్ మరియు బాలాజీ ట్రేడింగ్ కొరకు ఆటోమేటిక్ రీస్టాక్ ఆర్డర్లను సిద్ధం చేసింది.
         `;
       } else if (lang === "hi") {
         summaryBox.innerHTML = `
-          <strong>दुकान का मुख्य सारांश (24 अक्टूबर 2024):</strong><br/>
-          शर्मा किराना स्टोर ने आज 47 खुदरा बिक्री से ₹18,450 की कुल कमाई दर्ज की (18.2% दैनिक वृद्धि दर)। 
+          <strong>दुकान का मुख्य सारांश (${todayDate}):</strong><br/>
+          शर्मा किराना स्टोर ने आज ${store.metrics.todayOrders} खुदरा बिक्री से ₹${store.metrics.todayRevenue.toLocaleString('en-IN')} की कुल कमाई दर्ज की (18.2% दैनिक वृद्धि दर)। 
           त्योहारी सीजन के कारण वार्ड 12 में सोना मसूरी चावल की मांग में +21% और फॉर्च्यून सनफ्लावर ऑयल की मांग में +18% की भारी बढ़त दर्ज की गई। 
-          AI को-पायलट ने सप्ताहांत की भीड़ से पहले 6 उत्पादों को कम स्टॉक श्रेणी में चिह्नित किया है और आवश्यक खरीद ऑर्डर तैयार कर दिए हैं।
+          AI को-पायलट ने सप्ताहांत की भीड़ से पहले ${lowCount} उत्पादों को कम स्टॉक श्रेणी में चिह्नित किया है और आवश्यक खरीद ऑर्डर तैयार कर दिए हैं।
         `;
       } else {
         summaryBox.innerHTML = `
-          <strong>Executive Store Summary (Oct 24, 2024):</strong><br/>
-          Sharma Kirana Store recorded a gross revenue of ₹18,450 across 47 retail transactions today, maintaining an 18.2% daily growth velocity. 
+          <strong>Executive Store Summary (${todayDate}):</strong><br/>
+          Sharma Kirana Store recorded a gross revenue of ₹${store.metrics.todayRevenue.toLocaleString('en-IN')} across ${store.metrics.todayOrders} retail transactions today, maintaining an 18.2% daily growth velocity. 
           Festive bulk staple purchases in Ward 12 resulted in an accelerated +21% run-rate on Sona Masoori Rice and +18% on Fortune Sunflower Oil. 
-          The AI Co-pilot flagged 6 inventory items reaching critical safety stock before the upcoming weekend rush, with automatic restock purchase orders drafted for ABC Distributors and Balaji Trading Co.
+          The AI Co-pilot flagged ${lowCount} inventory items reaching critical safety stock before the upcoming weekend rush, with automatic restock purchase orders drafted for ABC Distributors and Balaji Trading Co.
         `;
       }
     }
@@ -584,8 +601,8 @@ document.addEventListener("DOMContentLoaded", () => {
       if (msg.sender === "user") {
         return `
           <div class="chat-bubble-row user-row">
-            <div class="chat-bubble user-bubble">${msg.text}</div>
-            ${msg.detectedLang ? `<span class="detected-lang-tag">Detected: ${msg.detectedLang}</span>` : ''}
+            <div class="chat-bubble user-bubble">${escapeHtml(msg.text)}</div>
+            ${msg.detectedLang ? `<span class="detected-lang-tag">Detected: ${escapeHtml(msg.detectedLang)}</span>` : ''}
           </div>
         `;
       } else {
@@ -605,7 +622,7 @@ document.addEventListener("DOMContentLoaded", () => {
                       ${t.status === 'completed' ? '✓' : (t.status === 'active' ? '⚙' : '○')}
                     </span>
                     <span style="color:${t.status === 'completed' ? 'var(--color-text-primary)' : 'var(--color-text-muted)'}; font-weight:${t.status === 'completed' ? '500' : '400'};">
-                      ${t.name}
+                      ${escapeHtml(t.name)}
                     </span>
                   </div>
                 `).join("")}
@@ -623,13 +640,13 @@ document.addEventListener("DOMContentLoaded", () => {
                 <span style="font-size:var(--font-size-xs);">${dict.detailsToggle}</span>
               </div>
               <div class="calculation-body" style="display:flex;">
-                <div class="calc-formula-row"><span>${dict.currentStockLabel}</span><span>${msg.calculation.currentStock}</span></div>
-                <div class="calc-formula-row"><span>${dict.weeklyVelocityLabel}</span><span>${msg.calculation.weeklyVelocity}</span></div>
-                <div class="calc-formula-row"><span>${dict.safetyThresholdLabel}</span><span>${msg.calculation.safetyThreshold}</span></div>
-                <div class="calc-formula-row"><span>${dict.daysRemainingLabel}</span><span>${msg.calculation.daysRemaining}</span></div>
-                <div class="calc-formula-row"><span>${dict.supplierLabel}</span><span>${msg.calculation.supplierName}</span></div>
-                <div class="calc-formula-row"><span>${dict.recommendedOrderLabel}</span><span>${msg.calculation.recommendedOrder}</span></div>
-                <div class="calc-formula-row"><span>${dict.estimatedCostLabel}</span><span>${msg.calculation.estimatedCost}</span></div>
+                <div class="calc-formula-row"><span>${dict.currentStockLabel}</span><span>${escapeHtml(msg.calculation.currentStock)}</span></div>
+                <div class="calc-formula-row"><span>${dict.weeklyVelocityLabel}</span><span>${escapeHtml(msg.calculation.weeklyVelocity)}</span></div>
+                <div class="calc-formula-row"><span>${dict.safetyThresholdLabel}</span><span>${escapeHtml(msg.calculation.safetyThreshold)}</span></div>
+                <div class="calc-formula-row"><span>${dict.daysRemainingLabel}</span><span>${escapeHtml(msg.calculation.daysRemaining)}</span></div>
+                <div class="calc-formula-row"><span>${dict.supplierLabel}</span><span>${escapeHtml(msg.calculation.supplierName)}</span></div>
+                <div class="calc-formula-row"><span>${dict.recommendedOrderLabel}</span><span>${escapeHtml(msg.calculation.recommendedOrder)}</span></div>
+                <div class="calc-formula-row"><span>${dict.estimatedCostLabel}</span><span>${escapeHtml(msg.calculation.estimatedCost)}</span></div>
               </div>
             </div>
           `;
@@ -645,7 +662,7 @@ document.addEventListener("DOMContentLoaded", () => {
                   <span>✓</span> <span>${lang === 'te' ? 'కొనుగోలు ఆర్డర్ ఆమోదించబడింది & పంపబడింది' : (lang === 'hi' ? 'खरीद ऑर्डर स्वीकृत व भेजा गया' : 'Purchase Order Approved & Transmitted')}</span>
                 </div>
                 <div style="font-size:var(--font-size-xs); color:var(--color-success-dark);">
-                  ${card.quantity} ${card.unit} of ${card.product} (${card.supplier}).
+                  ${card.quantity} ${escapeHtml(card.unit)} of ${escapeHtml(card.product)} (${escapeHtml(card.supplier)}).
                 </div>
               </div>
             `;
@@ -656,11 +673,11 @@ document.addEventListener("DOMContentLoaded", () => {
                   <span class="badge badge-ai">${dict.actionCardTitle}</span>
                   <span class="badge badge-warning">${dict.highPriority}</span>
                 </div>
-                <div class="ai-action-title">${lang === 'te' ? 'ఆర్డర్ చేయండి' : (lang === 'hi' ? 'ऑर्डर करें' : 'Order')} ${card.quantity} ${card.unit} of ${card.product}</div>
+                <div class="ai-action-title">${lang === 'te' ? 'ఆర్డర్ చేయండి' : (lang === 'hi' ? 'ऑर्डर करें' : 'Order')} ${card.quantity} ${escapeHtml(card.unit)} of ${escapeHtml(card.product)}</div>
                 <div class="ai-action-metrics">
                   <div>
                     <span class="ai-action-metric-label">${dict.supplierLabel}</span>
-                    <div class="ai-action-metric-val">${card.supplier}</div>
+                    <div class="ai-action-metric-val">${escapeHtml(card.supplier)}</div>
                   </div>
                   <div>
                     <span class="ai-action-metric-label">${dict.estimatedCostLabel}</span>
@@ -676,9 +693,11 @@ document.addEventListener("DOMContentLoaded", () => {
           }
         }
 
+        const safeAiText = escapeHtml(msg.text).replace(/\n/g, '<br/>');
+
         return `
           <div class="chat-bubble-row ai-row">
-            <div class="chat-bubble ai-bubble">${msg.text}</div>
+            <div class="chat-bubble ai-bubble">${safeAiText}</div>
             ${toolsHtml}
             ${calcHtml}
             ${actionHtml}

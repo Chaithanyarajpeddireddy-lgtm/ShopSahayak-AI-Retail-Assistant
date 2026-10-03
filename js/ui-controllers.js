@@ -3,6 +3,17 @@
    Role-Based Permissions, Confirmation Dialogs, Exports, Toasts
    ========================================================================== */
 
+function escapeHtml(str) {
+  if (str === null || str === undefined) return "";
+  return String(str)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+window.escapeHtml = escapeHtml;
+
 class UIController {
   constructor(store, aiEngine) {
     this.store = store;
@@ -88,10 +99,16 @@ class UIController {
     if (type === "alert") icon = "⚠";
     if (type === "ai") icon = "✦";
 
-    toast.innerHTML = `
-      <span style="font-weight:700;">${icon}</span>
-      <span style="flex:1;">${message}</span>
-    `;
+    const iconSpan = document.createElement("span");
+    iconSpan.style.fontWeight = "700";
+    iconSpan.textContent = icon;
+
+    const msgSpan = document.createElement("span");
+    msgSpan.style.flex = "1";
+    msgSpan.textContent = message;
+
+    toast.appendChild(iconSpan);
+    toast.appendChild(msgSpan);
 
     container.appendChild(toast);
 
@@ -110,17 +127,17 @@ class UIController {
     const modalBackdrop = document.getElementById("securityConfirmModal");
     if (!modalBackdrop) return;
 
-    document.getElementById("secConfirmTitle").innerText = title;
-    document.getElementById("secConfirmMsg").innerText = message;
-    document.getElementById("secConfirmAmount").innerText = `₹${Number(amount).toLocaleString('en-IN')}`;
-    document.getElementById("secConfirmDetails").innerText = details || "";
+    document.getElementById("secConfirmTitle").textContent = title;
+    document.getElementById("secConfirmMsg").textContent = message;
+    document.getElementById("secConfirmAmount").textContent = `₹${Number(amount).toLocaleString('en-IN')}`;
+    document.getElementById("secConfirmDetails").textContent = details || "";
 
     const confirmBtn = document.getElementById("secConfirmBtn");
     const cancelBtn = document.getElementById("secCancelBtn");
 
     const handleConfirm = () => {
       modalBackdrop.classList.remove("active");
-      confirmBtn.removeEventListener("click", handleConfirm);
+      confirmBtn.onclick = null;
       if (onConfirm) onConfirm();
     };
 
@@ -130,6 +147,48 @@ class UIController {
     };
 
     modalBackdrop.classList.add("active");
+  }
+
+  // ------------------------------------------------------------------------
+  // UNIFIED PURCHASE ORDER APPROVAL PIPELINE
+  // ------------------------------------------------------------------------
+  requestPurchaseOrderApproval({ productId, quantity, supplierName, actionCardId, autoConfirmDelayMs, onConfirmed }) {
+    if (this.store.currentUserRole === "viewer" || this.store.currentUserRole === "staff") {
+      this.showToast("Only Store Owner or Manager can approve purchase orders.", "alert");
+      return;
+    }
+
+    const prod = this.store.products.find(p => p.id === productId);
+    if (!prod) return;
+
+    const numQty = Number(quantity) || (prod.id === "PROD-001" ? 100 : Math.max(20, (prod.minStock * 2) - prod.stock));
+    const finalCost = numQty * prod.purchasePrice;
+    const finalSupplier = supplierName || prod.supplierName;
+
+    this.showSecurityConfirmDialog({
+      title: "Confirm Purchase Order",
+      message: `Are you sure you want to approve purchase order for ${prod.name} from ${finalSupplier}?`,
+      amount: finalCost,
+      details: `Quantity: ${numQty} ${prod.unit} • Terms: Net 7 Days Credit`,
+      onConfirm: () => {
+        const poNumber = this.store.getNextPONumber();
+        this.store.restockProduct(prod.id, numQty, finalSupplier, poNumber);
+
+        if (actionCardId && this.aiEngine) {
+          this.aiEngine.finalizeActionCardApproval(actionCardId, poNumber, numQty, finalCost);
+        }
+
+        this.showToast(`Purchase order ${poNumber} approved! Added ${numQty} ${prod.unit} of ${prod.name}.`, "success");
+        if (onConfirmed) onConfirmed(poNumber);
+      }
+    });
+
+    if (autoConfirmDelayMs) {
+      setTimeout(() => {
+        const confirmBtn = document.getElementById("secConfirmBtn");
+        if (confirmBtn) confirmBtn.click();
+      }, autoConfirmDelayMs);
+    }
   }
 
   // ------------------------------------------------------------------------
@@ -204,26 +263,26 @@ class UIController {
     const recQty = prod.id === "PROD-001" ? 100 : Math.max(20, (prod.minStock * 2) - prod.stock);
     const estCost = recQty * prod.purchasePrice;
 
-    document.getElementById("restockRecommendedQty").value = recQty;
+    const qtyInput = document.getElementById("restockRecommendedQty");
+    const costDisplay = document.getElementById("restockEstCost");
+    
+    qtyInput.value = recQty;
     document.getElementById("restockSupplier").innerText = prod.supplierName;
-    document.getElementById("restockEstCost").innerText = `₹${estCost.toLocaleString('en-IN')}`;
+    costDisplay.innerText = `₹${estCost.toLocaleString('en-IN')}`;
+
+    qtyInput.oninput = () => {
+      const q = Number(qtyInput.value) || 0;
+      costDisplay.innerText = `₹${(q * prod.purchasePrice).toLocaleString('en-IN')}`;
+    };
 
     const approveBtn = document.getElementById("restockApproveBtn");
     approveBtn.onclick = () => {
-      const finalQty = Number(document.getElementById("restockRecommendedQty").value) || recQty;
-      const finalCost = finalQty * prod.purchasePrice;
-
-      // Sensitive financial action check
-      this.showSecurityConfirmDialog({
-        title: "Confirm Purchase Order",
-        message: `Are you sure you want to approve purchase order for ${prod.name} from ${prod.supplierName}?`,
-        amount: finalCost,
-        details: `Quantity: ${finalQty} ${prod.unit} • Terms: Net 7 Days Credit`,
-        onConfirm: () => {
-          modal.classList.remove("active");
-          this.store.restockProduct(prod.id, finalQty, prod.supplierName);
-          this.showToast(`Purchase order approved! Added ${finalQty} ${prod.unit} of ${prod.name}.`, "success");
-        }
+      const finalQty = Number(qtyInput.value) || recQty;
+      modal.classList.remove("active");
+      this.requestPurchaseOrderApproval({
+        productId: prod.id,
+        quantity: finalQty,
+        supplierName: prod.supplierName
       });
     };
 
@@ -303,8 +362,9 @@ class UIController {
   // EXPORT REPORTS (CSV, EXCEL, PRINTABLE PDF)
   // ------------------------------------------------------------------------
   exportReport(format) {
+    const BOM = "\uFEFF";
     if (format === "csv") {
-      let csv = "Product Name,SKU,Category,Current Stock,Minimum Stock,Unit Price,Supplier,Status\n";
+      let csv = BOM + "Product Name,SKU,Category,Current Stock,Minimum Stock,Unit Price,Supplier,Status\n";
       this.store.products.forEach(p => {
         csv += `"${p.name}","${p.sku}","${p.category}",${p.stock},${p.minStock},${p.sellingPrice},"${p.supplierName}","${p.status}"\n`;
       });
@@ -316,21 +376,21 @@ class UIController {
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
-      this.showToast("Inventory CSV report downloaded!", "success");
-    } else if (format === "excel") {
-      let csv = "Order ID,Time,Customer,Items,Amount,Payment Method,Status\n";
+      this.showToast("Inventory CSV report downloaded (opens in Excel)!", "success");
+    } else if (format === "excel" || format === "sales_csv") {
+      let csv = BOM + "Order ID,Time,Customer,Items,Amount,Payment Method,Status\n";
       this.store.transactions.forEach(t => {
         csv += `"${t.id}","${t.time}","${t.customer}","${t.itemsSummary}",${t.amount},"${t.paymentMethod}","${t.status}"\n`;
       });
-      const blob = new Blob([csv], { type: "application/vnd.ms-excel;charset=utf-8;" });
+      const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
       const url = URL.createObjectURL(blob);
       const link = document.createElement("a");
       link.setAttribute("href", url);
-      link.setAttribute("download", `ShopSahayak_Sales_Ledger_${new Date().toISOString().slice(0, 10)}.xls`);
+      link.setAttribute("download", `ShopSahayak_Sales_Ledger_${new Date().toISOString().slice(0, 10)}.csv`);
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
-      this.showToast("Sales Excel report downloaded!", "success");
+      this.showToast("Sales CSV report downloaded (opens in Excel)!", "success");
     } else if (format === "pdf") {
       this.showToast("Preparing printable report...", "info");
       setTimeout(() => {
